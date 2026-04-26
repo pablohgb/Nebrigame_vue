@@ -2,12 +2,12 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
-import { FaDiscord, FaReddit, FaTwitch, FaXTwitter, FaInstagram, FaYoutube } from 'oh-vue-icons/icons'
+import { FaDiscord, FaReddit, FaTwitch, FaTwitter, FaInstagram, FaYoutube } from 'oh-vue-icons/icons'
 import App from './App.vue'
 import router from './router'
 import './style.css'
 
-addIcons(FaDiscord, FaReddit, FaTwitch, FaXTwitter, FaInstagram, FaYoutube)
+addIcons(FaDiscord, FaReddit, FaTwitch, FaTwitter, FaInstagram, FaYoutube)
 
 const app = createApp(App)
 const pinia = createPinia()

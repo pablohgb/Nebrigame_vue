@@ -20,7 +20,7 @@
     { href: 'https://discord.com/',       icon: 'fa-discord',   label: 'Discord'   },
     { href: 'https://www.reddit.com/',    icon: 'fa-reddit',    label: 'Reddit'    },
     { href: 'https://www.twitch.tv/',     icon: 'fa-twitch',    label: 'Twitch'    },
-    { href: 'https://x.com/',             icon: 'fa-x-twitter', label: 'Twitter'   },
+    { href: 'https://x.com/',             icon: 'fa-twitter', label: 'Twitter'   },
     { href: 'https://www.instagram.com/', icon: 'fa-instagram', label: 'Instagram' },
     { href: 'https://www.youtube.com/',   icon: 'fa-youtube',   label: 'Youtube'   },
   ]
