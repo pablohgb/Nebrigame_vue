@@ -1,4 +1,5 @@
 import { ref, watch, onUnmounted } from 'vue'
+import { parseId } from '../utils/parseId'
 
 const apiUrl = import.meta.env.VITE_BACK_CONNECTION
 
@@ -7,7 +8,8 @@ const usePayment = (userId) => {
     const loading = ref(true)
     let controller = null
 
-    const fetchPayment = async (id) => {
+    const fetchPayment = async () => {
+        const id = parseId(userId)
         if (!id) {
             payment.value = []
             loading.value = false
@@ -32,9 +34,9 @@ const usePayment = (userId) => {
         }
     }
 
-    const refetchPayment = () => fetchPayment(userId)
+    const refetchPayment = fetchPayment
 
-    watch(() => userId, (id) => fetchPayment(id), { immediate: true })
+    watch(() => parseId(userId), () => fetchPayment(), { immediate: true })
     onUnmounted(() => controller?.abort())
 
     return { payment, loading, refetchPayment }

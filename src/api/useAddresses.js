@@ -1,4 +1,5 @@
 import { ref, watch, onUnmounted } from 'vue'
+import { parseId } from '../utils/parseId'
 
 const apiUrl = import.meta.env.VITE_BACK_CONNECTION
 
@@ -7,7 +8,8 @@ const useAddresses = (userId) => {
     const loading = ref(true)
     let controller = null
 
-    const fetchAddresses = async (id) => {
+    const fetchAddresses = async () => {
+        const id = parseId(userId)
         if (!id) {
             addresses.value = []
             loading.value = false
@@ -32,9 +34,9 @@ const useAddresses = (userId) => {
         }
     }
 
-    const refetchAddresses = () => fetchAddresses(userId)
+    const refetchAddresses = fetchAddresses
 
-    watch(() => userId, (id) => fetchAddresses(id), { immediate: true })
+    watch(() => parseId(userId), () => fetchAddresses(), { immediate: true })
     onUnmounted(() => controller?.abort())
 
     return { addresses, loading, refetchAddresses }

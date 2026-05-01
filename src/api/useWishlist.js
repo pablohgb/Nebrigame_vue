@@ -1,4 +1,5 @@
 import { ref, watch, onUnmounted } from 'vue'
+import { parseId } from '../utils/parseId'
 
 const apiUrl = import.meta.env.VITE_BACK_CONNECTION
 
@@ -7,7 +8,8 @@ const useWishlist = (userId) => {
     const loading = ref(true)
     let controller = null
 
-    const fetchWishlist = async (id) => {
+    const fetchWishlist = async () => {
+        const id = parseId(userId)
         if (!id) {
             wishlist.value = []
             loading.value = false
@@ -49,9 +51,9 @@ const useWishlist = (userId) => {
         }
     }
 
-    const refetchWishlist = () => fetchWishlist(userId)
+    const refetchWishlist = fetchWishlist
 
-    watch(() => userId, (id) => fetchWishlist(id), { immediate: true })
+    watch(() => parseId(userId), () => fetchWishlist(), { immediate: true })
     onUnmounted(() => controller?.abort())
 
     return { wishlist, loading, refetchWishlist }
@@ -62,8 +64,12 @@ const useIsInWishlist = (userId, productId) => {
     const loading = ref(true)
     let controller = null
 
-    const fetchIsInWishlist = async (uId, pId) => {
+    const fetchIsInWishlist = async () => {
+        const uId = parseId(userId)
+        const pId = parseId(productId)
+
         if (!uId || !pId) {
+            isInWishlist.value = false
             loading.value = false
             return
         }
@@ -75,8 +81,8 @@ const useIsInWishlist = (userId, productId) => {
             const res = await fetch(`${apiUrl}/usuarios/${uId}/wishlist`, { signal: controller.signal })
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
             const data = await res.json()
-            const productIds = data.wishlist.map(item => item.producto_id)
-            isInWishlist.value = productIds.includes(parseInt(pId))
+            const productIds = data.wishlist.map(item => Number(item.producto_id))
+            isInWishlist.value = productIds.includes(pId)
         } catch (err) {
             if (err.name === 'AbortError') return
             console.error('Error checking wishlist:', err)
@@ -86,7 +92,7 @@ const useIsInWishlist = (userId, productId) => {
         }
     }
 
-    watch([userId, productId], ([uId, pId]) => fetchIsInWishlist(uId, pId), { immediate: true })
+    watch([() => parseId(userId), () => parseId(productId)], () => fetchIsInWishlist(), { immediate: true })
     onUnmounted(() => controller?.abort())
 
     return { isInWishlist, loading }

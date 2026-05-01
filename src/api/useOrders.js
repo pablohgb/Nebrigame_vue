@@ -1,4 +1,5 @@
 import { ref, watch, onUnmounted } from 'vue'
+import { parseId } from '../utils/parseId'
 
 const apiUrl = import.meta.env.VITE_BACK_CONNECTION
 
@@ -7,7 +8,8 @@ const useOrders = (userId) => {
     const loading = ref(true)
     let controller = null
 
-    const fetchOrders = async (id) => {
+    const fetchOrders = async () => {
+        const id = parseId(userId)
         if (!id) {
             orders.value = []
             loading.value = false
@@ -32,7 +34,7 @@ const useOrders = (userId) => {
         }
     }
 
-    watch(() => userId, (id) => fetchOrders(id), { immediate: true })
+    watch(() => parseId(userId), () => fetchOrders(), { immediate: true })
     onUnmounted(() => controller?.abort())
 
     return { orders, loading }
