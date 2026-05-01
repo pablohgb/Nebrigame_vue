@@ -17,37 +17,32 @@
             <h2>Carrito</h2>
             <div class="cart-products">
               <div v-for="producto in productosCarrito" :key="producto.id" class="product-item-cart">
-                <img
-                  :src="producto.imagen"
-                  :alt="producto.nombre"
-                  class="product-image-cart"
-                  @error="(e) => { e.target.onerror = null; e.target.src = noDisponible }"
-                />
+                <img :src="producto.imagen" :alt="producto.nombre" class="product-image-cart"
+                  @error="(e) => { e.target.onerror = null; e.target.src = noDisponible }" />
                 <div class="product-info-cart">
                   <h3 class="product-name-cart">
                     {{ producto.nombre }}
-                    <span v-if="producto.plataformaNombre" class="producto-plataforma-cart"> ({{ producto.plataformaNombre }})</span>
+                    <span v-if="producto.plataformaNombre" class="producto-plataforma-cart"> ({{
+                      producto.plataformaNombre }})</span>
                   </h3>
                   <div class="product-price-container-cart">
                     <span class="product-price-cart">{{ producto.precio.toFixed(2) }}€</span>
                     <div class="product-actions-cart">
-                      <button class="btn-icon-cart btn-minus-cart" @click="restarProducto(producto)" title="Restar producto" type="button">
+                      <button class="btn-icon-cart btn-minus-cart" @click="restarProducto(producto)"
+                        title="Restar producto" type="button">
                         <Minus :size="18" />
                       </button>
-                      <input
-                        type="number"
-                        min="1"
-                        class="product-quantity-cart product-quantity-input-cart"
+                      <input type="number" min="1" class="product-quantity-cart product-quantity-input-cart"
                         :value="editingQuantity[getItemKey(producto)] ?? producto.cantidad"
                         @change="(e) => editingQuantity[getItemKey(producto)] = e.target.value"
-                        @blur="commitQuantityInput(producto)"
-                        @keydown.enter="(e) => e.target.blur()"
-                        :aria-label="`Cantidad de ${producto.nombre}`"
-                      />
-                      <button class="btn-icon-cart btn-add-cart" @click="sumarProducto(producto)" title="Añadir producto" type="button">
+                        @blur="commitQuantityInput(producto)" @keydown.enter="(e) => e.target.blur()"
+                        :aria-label="`Cantidad de ${producto.nombre}`" />
+                      <button class="btn-icon-cart btn-add-cart" @click="sumarProducto(producto)"
+                        title="Añadir producto" type="button">
                         <Plus :size="18" />
                       </button>
-                      <button class="btn-icon-cart btn-delete-cart" @click="openConfirmModal(producto)" type="button" title="Eliminar del carrito">
+                      <button class="btn-icon-cart btn-delete-cart" @click="openConfirmModal(producto)" type="button"
+                        title="Eliminar del carrito">
                         <Trash2 :size="18" />
                       </button>
                     </div>
@@ -100,13 +95,9 @@
 
     <Footer />
 
-    <ConfirmModal
-      :open="showConfirmModal"
-      :onClose="closeConfirmModal"
-      :onConfirm="handleConfirmEliminar"
+    <ConfirmModal :open="showConfirmModal" :onClose="closeConfirmModal" :onConfirm="handleConfirmEliminar"
       title="Eliminar del carrito"
-      :message="productToDelete ? `¿Eliminar ${productToDelete.nombre} del carrito?` : ''"
-    />
+      :message="productToDelete ? `¿Eliminar ${productToDelete.nombre} del carrito?` : ''" />
   </div>
 
 </template>
@@ -268,7 +259,6 @@ const continuarCompra = async () => {
 
 
 <style scoped>
-
 .cart-page {
   background-image: url('../../assets/images/backgroundCart.jpg');
   background-size: cover;
@@ -306,9 +296,18 @@ const continuarCompra = async () => {
   min-width: 0;
 }
 
-.my-cart h2 { color: white; font-size: 1.8rem; margin: 0 0 1.5rem 0; font-weight: 600; }
+.my-cart h2 {
+  color: white;
+  font-size: 1.8rem;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
 
-.cart-products { display: flex; flex-direction: column; gap: 1.5rem; }
+.cart-products {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
 .product-item-cart {
   background: rgba(91, 110, 245, 0.4);
@@ -337,7 +336,13 @@ const continuarCompra = async () => {
   flex-shrink: 0;
 }
 
-.product-info-cart { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+.product-info-cart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
 
 .product-name-cart {
   color: white;
@@ -349,7 +354,10 @@ const continuarCompra = async () => {
   white-space: nowrap;
 }
 
-.producto-plataforma-cart { color: rgba(255, 255, 255, 0.75); font-weight: 500; }
+.producto-plataforma-cart {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+}
 
 .product-price-container-cart {
   display: flex;
@@ -360,8 +368,18 @@ const continuarCompra = async () => {
   gap: 0.5rem;
 }
 
-.product-price-cart { color: white; font-size: 1.1rem; font-weight: 700; }
-.product-actions-cart { display: flex; gap: 1rem; align-items: center; flex-shrink: 0; }
+.product-price-cart {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.product-actions-cart {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-shrink: 0;
+}
 
 .btn-icon-cart {
   background: none;
@@ -377,10 +395,22 @@ const continuarCompra = async () => {
   justify-content: center;
 }
 
-.btn-icon-cart:hover { background: rgba(255, 255, 255, 0.1); transform: scale(1.1); }
-.btn-add-cart:hover { color: #44b385; }
-.btn-minus-cart:hover { color: #fbbf24; }
-.btn-delete-cart:hover { color: #ef4444; }
+.btn-icon-cart:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.btn-add-cart:hover {
+  color: #44b385;
+}
+
+.btn-minus-cart:hover {
+  color: #fbbf24;
+}
+
+.btn-delete-cart:hover {
+  color: #ef4444;
+}
 
 .product-quantity-cart {
   min-width: 32px;
@@ -422,8 +452,18 @@ const continuarCompra = async () => {
   min-width: 0;
 }
 
-.cart-summary h2 { color: white; font-size: 1.8rem; margin: 0 0 1.5rem 0; font-weight: 600; }
-.summary-content-cart { display: flex; flex-direction: column; gap: 1.5rem; }
+.cart-summary h2 {
+  color: white;
+  font-size: 1.8rem;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
+
+.summary-content-cart {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
 .btn-continue-cart {
   background-color: #44b385;
@@ -440,8 +480,14 @@ const continuarCompra = async () => {
   font-family: inherit;
 }
 
-.btn-continue-cart:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(123, 199, 77, 0.5); }
-.btn-continue-cart:active { transform: translateY(0); }
+.btn-continue-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(123, 199, 77, 0.5);
+}
+
+.btn-continue-cart:active {
+  transform: translateY(0);
+}
 
 .summary-detail-cart {
   background: rgba(91, 110, 245, 0.3);
@@ -450,7 +496,12 @@ const continuarCompra = async () => {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.summary-detail-cart h3 { color: white; font-size: 1.1rem; margin: 0 0 1rem 0; font-weight: 600; }
+.summary-detail-cart h3 {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
 
 .summary-line-cart {
   display: flex;
@@ -460,9 +511,16 @@ const continuarCompra = async () => {
   font-size: 0.95rem;
 }
 
-.summary-line-cart span:last-child { font-weight: 600; color: white; }
+.summary-line-cart span:last-child {
+  font-weight: 600;
+  color: white;
+}
 
-.summary-total-cart { margin-top: 1rem; padding-top: 1rem; border-top: 2px solid rgba(255, 255, 255, 0.2); }
+.summary-total-cart {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
 
 .final-price-cart {
   display: flex;
@@ -473,7 +531,11 @@ const continuarCompra = async () => {
   margin-top: 0.5rem;
 }
 
-.empty-cart { text-align: center; padding: 4rem 2rem; color: white; }
+.empty-cart {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: white;
+}
 
 .empty-cart-icon {
   font-size: 5rem;
@@ -484,7 +546,11 @@ const continuarCompra = async () => {
   align-items: center;
 }
 
-.empty-cart h3 { font-size: 1.8rem; margin-bottom: 1rem; font-weight: 600; }
+.empty-cart h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
 
 .btn-keep-shopping-cart {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -499,71 +565,180 @@ const continuarCompra = async () => {
   font-family: inherit;
 }
 
-.btn-keep-shopping-cart:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+.btn-keep-shopping-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
 
 @media (max-width: 1226px) {
-  .cart-container { padding: 1.5rem; }
-  .cart-content { gap: 1.5rem; }
-  .my-cart, .cart-summary { padding: 1.75rem; }
-  .product-item-cart { padding: 1.25rem; gap: 1.25rem; }
+  .cart-container {
+    padding: 1.5rem;
+  }
+
+  .cart-content {
+    gap: 1.5rem;
+  }
+
+  .my-cart,
+  .cart-summary {
+    padding: 1.75rem;
+  }
+
+  .product-item-cart {
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
 }
 
 @media (max-width: 1150px) {
-  .cart-content { gap: 1.25rem; }
-  .my-cart, .cart-summary { padding: 1.5rem; }
-  .product-name-cart { font-size: 1.2rem; }
-  .product-image-cart { width: 90px; height: 90px; }
+  .cart-content {
+    gap: 1.25rem;
+  }
+
+  .my-cart,
+  .cart-summary {
+    padding: 1.5rem;
+  }
+
+  .product-name-cart {
+    font-size: 1.2rem;
+  }
+
+  .product-image-cart {
+    width: 90px;
+    height: 90px;
+  }
 }
 
 @media (max-width: 1098px) {
-  .cart-container { padding: 1.25rem; }
-  .cart-content { gap: 1rem; }
-  .my-cart, .cart-summary { padding: 1.25rem; }
-  .product-item-cart { padding: 1rem; gap: 1rem; }
-  .product-name-cart { font-size: 1.1rem; }
-  .product-image-cart { width: 80px; height: 80px; }
+  .cart-container {
+    padding: 1.25rem;
+  }
+
+  .cart-content {
+    gap: 1rem;
+  }
+
+  .my-cart,
+  .cart-summary {
+    padding: 1.25rem;
+  }
+
+  .product-item-cart {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .product-name-cart {
+    font-size: 1.1rem;
+  }
+
+  .product-image-cart {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 @media (max-width: 1024px) {
-  .cart-content { grid-template-columns: 1fr; }
-  .cart-summary { position: static; }
+  .cart-content {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-summary {
+    position: static;
+  }
 }
 
 @media (max-width: 768px) {
-  .my-cart, .cart-summary { padding: 1.5rem; }
+
+  .my-cart,
+  .cart-summary {
+    padding: 1.5rem;
+  }
 
   .product-item-cart {
     flex-direction: column;
     text-align: center;
   }
 
-  .product-info-cart h3 { font-size: 20px; }
-  .product-image-cart { width: 120px; height: 120px; }
+  .product-info-cart h3 {
+    font-size: 20px;
+  }
+
+  .product-image-cart {
+    width: 120px;
+    height: 120px;
+  }
 
   .product-price-container-cart {
     flex-direction: column;
     gap: 1rem;
   }
 
-  .product-name-cart { white-space: normal; }
+  .product-name-cart {
+    white-space: normal;
+  }
 }
 
 @media (max-width: 480px) {
-  .cart-container { padding: 1rem; min-height: auto; width: 100%; }
-  .my-cart h2, .cart-summary h2 { font-size: 1.4rem; }
-  .product-name-cart { font-size: 1rem; }
-  .product-price-cart { font-size: 1.1rem; }
-  .btn-continue-cart { font-size: 1rem; padding: 0.9rem 1.5rem; }
+  .cart-container {
+    padding: 1rem;
+    min-height: auto;
+    width: 100%;
+  }
+
+  .my-cart h2,
+  .cart-summary h2 {
+    font-size: 1.4rem;
+  }
+
+  .product-name-cart {
+    font-size: 1rem;
+  }
+
+  .product-price-cart {
+    font-size: 1.1rem;
+  }
+
+  .btn-continue-cart {
+    font-size: 1rem;
+    padding: 0.9rem 1.5rem;
+  }
 }
 
 @media (max-width: 320px) {
-  .cart-container { padding: 0.75rem; margin-top: 40px; }
-  .my-cart, .cart-summary { padding: 1rem; }
-  .my-cart h2, .cart-summary h2 { font-size: 1.2rem; }
-  .product-item-cart { padding: 0.75rem; gap: 0.75rem; }
-  .product-image-cart { width: 70px; height: 70px; }
-  .product-name-cart { font-size: 0.9rem; }
-  .btn-continue-cart { font-size: 0.95rem; padding: 0.8rem 1.2rem; }
-}
+  .cart-container {
+    padding: 0.75rem;
+    margin-top: 40px;
+  }
 
+  .my-cart,
+  .cart-summary {
+    padding: 1rem;
+  }
+
+  .my-cart h2,
+  .cart-summary h2 {
+    font-size: 1.2rem;
+  }
+
+  .product-item-cart {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .product-image-cart {
+    width: 70px;
+    height: 70px;
+  }
+
+  .product-name-cart {
+    font-size: 0.9rem;
+  }
+
+  .btn-continue-cart {
+    font-size: 0.95rem;
+    padding: 0.8rem 1.2rem;
+  }
+}
 </style>
