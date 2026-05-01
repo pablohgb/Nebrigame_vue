@@ -307,55 +307,164 @@
     }
   }
 
-/* FIXME - Arreglar el formato */
-
   @media (max-width: 1150px) {
     .navbar { 
       margin: 0 5px 0 0; 
     }
     
-    .nav-links { gap: 0.3rem; margin-left: 20px; }
-    .nav-links-right { gap: 0.3rem; }
-    .nav-links a { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
-    .hola-usuario { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
-    .header-search-btn { min-width: 36px; min-height: 36px; }
+    .nav-links { 
+      gap: 0.3rem; 
+      margin-left: 20px; 
+    }
+
+    .nav-links-right { 
+      gap: 0.3rem; 
+    }
+
+    .nav-links a { 
+      padding: 0.4rem 0.8rem; 
+      font-size: 0.85rem; 
+    }
+
+    .hola-usuario { 
+      padding: 0.4rem 0.8rem; 
+      font-size: 0.85rem; 
+    }
+
+    .header-search-btn { 
+      min-width: 36px; 
+      min-height: 36px; 
+    }
   }
 
   @media (max-width: 1098px) {
-    .navbar { margin: 0; padding: 0.8rem 0.5rem; }
-    .logo img { width: 70px; }
-    .nav-links { gap: 0.2rem; margin-left: 15px; }
-    .nav-links-right { gap: 0.2rem; }
-    .nav-links a { padding: 0.4rem 0.6rem; font-size: 0.8rem; gap: 0.3rem; }
-    .nav-links-right a { padding: 0.5rem 0.8rem; }
-    .hola-usuario { padding: 0.4rem 0.7rem; font-size: 0.8rem; gap: 0.3rem; }
-    .header-search { margin: 0 5px; }
-    .header-search-btn { min-width: 34px; min-height: 34px; padding: 6px 10px; }
+    .navbar { 
+      margin: 0; 
+      padding: 0.8rem 0.5rem; 
+    }
+
+    .logo img { 
+      width: 70px; 
+    }
+
+    .nav-links { 
+      gap: 0.2rem; 
+      margin-left: 15px; 
+    }
+
+    .nav-links-right { 
+      gap: 0.2rem; 
+    }
+
+    .nav-links a { 
+      padding: 0.4rem 0.6rem; 
+      font-size: 0.8rem; gap: 0.3rem; 
+    }
+
+    .nav-links-right a { 
+      padding: 0.5rem 0.8rem; 
+    }
+
+    .hola-usuario { 
+      padding: 0.4rem 0.7rem; 
+      font-size: 0.8rem; 
+      gap: 0.3rem; 
+    }
+
+    .header-search { 
+      margin: 0 5px; 
+    }
+
+    .header-search-btn { 
+      min-width: 34px; 
+      min-height: 34px; 
+      padding: 6px 10px; 
+    }
   }
 
   @media (max-width: 1024px) {
-    .header-search.expanded .header-search-input { width: 150px; }
+    .header-search.expanded .header-search-input { 
+      width: 150px; 
+    }
   }
 
   @media (max-width: 960px) {
-    .menu-toggle { display: block; }
-    .navbar { flex-wrap: wrap; }
-    .nav-links { display: none; flex-direction: column; width: 100%; }
-    .nav-links-right { display: none; flex-direction: row; flex-wrap: wrap; width: 100%; padding-bottom: 10px; margin: 30px 0 0 40px; gap: 0.5rem; }
-    .header-search { order: 3; width: 100%; margin: 10px 0 0 0; justify-content: flex-start; }
-    .header-search-input { width: 200px !important; opacity: 1 !important; }
-    .header-search-btn { border-radius: 50%; }
-    .nav-links.active { display: flex; }
-    .nav-links-right.active { display: flex; margin-left: 20px; }
-    .nav-links a { width: auto; justify-content: flex-start; padding: 0.8rem 1rem; }
-    .nav-links-right a { width: auto; }
-    .logo img { width: 50px; }
+    .menu-toggle { 
+      display: block; 
+    }
+
+    .navbar { 
+      flex-wrap: wrap; 
+    }
+
+    .nav-links { 
+      display: none; 
+      flex-direction: column; 
+      width: 100%; 
+    }
+
+    .nav-links-right { 
+      display: none; 
+      flex-direction: row; 
+      flex-wrap: wrap; 
+      width: 100%; 
+      padding-bottom: 10px; 
+      margin: 30px 0 0 40px; 
+      gap: 0.5rem; 
+    }
+
+    .header-search { 
+      order: 3; 
+      width: 100%; 
+      margin: 10px 0 0 0;
+      justify-content: flex-start; 
+    }
+
+    .header-search-input { 
+      width: 200px !important; 
+      opacity: 1 !important; 
+    }
+
+    .header-search-btn { 
+      border-radius: 50%; 
+    }
+
+    .nav-links.active { 
+      display: flex; 
+    }
+
+    .nav-links-right.active { 
+      display: flex; 
+      margin-left: 20px; 
+    }
+
+    .nav-links a { 
+      width: auto; 
+      justify-content: flex-start; 
+      padding: 0.8rem 1rem; 
+    }
+
+    .nav-links-right a { 
+      width: auto; 
+    }
+
+    .logo img { 
+      width: 50px; 
+    }
+
   }
 
   @media (max-width: 480px) {
-    .navbar { padding: 0.6rem 1rem; }
-    .logo img { width: 40px; }
-    .nav-links a { font-size: 0.9rem; }
+    .navbar { 
+      padding: 0.6rem 1rem; 
+    }
+
+    .logo img { width: 40px; 
+    }
+
+    .nav-links a { 
+      font-size: 0.9rem; 
+    }
   }
 
 </style>
