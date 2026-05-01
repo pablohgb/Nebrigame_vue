@@ -19,7 +19,9 @@
               <div class="pedido-header">
                 <span class="pedido-id">Pedido #{{ orders.length - index }}</span>
                 <span class="pedido-fecha">
-                  {{ new Date(pedido.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+                  {{ new Date(pedido.fecha).toLocaleDateString('es-ES', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                  }) }}
                 </span>
                 <span :class="`pedido-estado pedido-estado--${pedido.estado}`">{{ pedido.estado }}</span>
               </div>
@@ -29,7 +31,8 @@
                   <div class="pedido-producto-info">
                     <span class="pedido-producto-nombre">
                       {{ producto.nombre }}
-                      <span v-if="producto.plataforma" class="pedido-producto-plataforma"> ({{ producto.plataforma }})</span>
+                      <span v-if="producto.plataforma" class="pedido-producto-plataforma"> ({{ producto.plataforma
+                        }})</span>
                     </span>
                     <span class="pedido-producto-cantidad">Cantidad: {{ producto.cantidad }}</span>
                   </div>
@@ -122,7 +125,11 @@
     min-height: 300px;
   }
 
-  .pedidos-lista { display: flex; flex-direction: column; gap: 24px; }
+.pedidos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
 
   .pedido-card {
     background: rgba(255, 255, 255, 0.1);
@@ -149,47 +156,106 @@
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
   }
 
-  .pedido-id { color: #ffffff; font-weight: 700; font-size: 18px; }
-  .pedido-fecha { color: rgba(255, 255, 255, 0.8); font-size: 15px; margin-left: auto; }
+.pedido-id { color: #ffffff; font-weight: 700; font-size: 18px; }
+.pedido-fecha { color: rgba(255, 255, 255, 0.8); font-size: 15px; margin-left: auto; }
 
-  .pedido-estado {
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: capitalize;
-  }
+.pedido-fecha {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  margin-left: auto;
+}
 
-  .pedido-estado--procesando { background: rgba(241, 15, 207, 0.35); color: #ffffff; border: 1px solid #f10fde; }
-  .pedido-estado--pendiente { background: rgba(241, 196, 15, 0.35); color: #ffffff; border: 1px solid #f1c40f; }
-  .pedido-estado--enviado { background: rgba(52, 152, 219, 0.35); color: #ffffff; border: 1px solid #3498db; }
-  .pedido-estado--entregado { background: rgba(46, 204, 113, 0.35); color: #ffffff; border: 1px solid #2ecc71; }
-  .pedido-estado--cancelado { background: rgba(231, 76, 60, 0.35); color: #ffffff; border: 1px solid #e74c3c; }
+.pedido-estado {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
 
-  .pedido-productos { display: flex; flex-direction: column; gap: 12px; }
+.pedido-estado--procesando {
+  background: rgba(241, 15, 207, 0.35);
+  color: #ffffff;
+  border: 1px solid #f10fde;
+}
 
-  .pedido-producto {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-  }
+.pedido-estado--pendiente {
+  background: rgba(241, 196, 15, 0.35);
+  color: #ffffff;
+  border: 1px solid #f1c40f;
+}
 
-  .pedido-producto-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-  .pedido-producto-nombre { color: #ffffff; font-size: 15px; font-weight: 600; }
-  .pedido-producto-plataforma { color: rgba(255, 255, 255, 0.75); font-weight: 500; }
-  .pedido-producto-cantidad { color: rgba(255, 255, 255, 0.7); font-size: 13px; }
-  .pedido-producto-precio { color: #ffffff; font-size: 16px; font-weight: 700; white-space: nowrap; }
+.pedido-estado--enviado {
+  background: rgba(52, 152, 219, 0.35);
+  color: #ffffff;
+  border: 1px solid #3498db;
+}
 
-  .pedido-envio {
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    border-left: 4px solid rgba(255, 255, 255, 0.3);
-  }
+.pedido-estado--entregado {
+  background: rgba(46, 204, 113, 0.35);
+  color: #ffffff;
+  border: 1px solid #2ecc71;
+}
+
+.pedido-estado--cancelado {
+  background: rgba(231, 76, 60, 0.35);
+  color: #ffffff;
+  border: 1px solid #e74c3c;
+}
+
+.pedido-productos {
+  display: flex;
+  flex-direction:
+    column;
+  gap: 12px;
+}
+
+.pedido-producto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.pedido-producto-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.pedido-producto-nombre {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pedido-producto-plataforma {
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+}
+
+.pedido-producto-cantidad {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+}
+
+.pedido-producto-precio {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pedido-envio {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
+}
 
   .pedido-envio-titulo {
     color: rgba(255, 255, 255, 0.9);
@@ -200,7 +266,12 @@
     letter-spacing: 0.5px;
   }
 
-  .pedido-envio-datos { color: rgba(255, 255, 255, 0.8); font-size: 14px; line-height: 1.6; margin: 0; }
+.pedido-envio-datos {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
 
   .pedido-footer {
     display: flex;
@@ -211,19 +282,58 @@
     border-top: 2px solid rgba(255, 255, 255, 0.2);
   }
 
-  .pedido-total-label { color: rgba(255, 255, 255, 0.8); font-size: 16px; font-weight: 500; }
-  .pedido-total-valor { color: #ffffff; font-size: 24px; font-weight: 700; }
+.pedido-total-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  font-weight: 500;
+}
 
-  @media (max-width: 768px) {
-    .pedidos-page-wrapper { padding: 0 16px; }
-    .pedidos-page-container { padding: 20px; }
-    .pedidos-titulo { font-size: 28px; margin-bottom: 24px; padding-bottom: 16px; }
-    .pedido-card { padding: 20px; }
-    .pedido-header { flex-direction: column; align-items: flex-start; }
-    .pedido-fecha { margin-left: 0; }
-    .pedido-producto { flex-direction: column; align-items: flex-start; }
-    .pedido-producto-precio { align-self: flex-end; }
-    .pedido-footer { flex-direction: column; align-items: flex-end; }
+.pedido-total-valor {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .pedidos-page-wrapper {
+    padding: 0 16px;
   }
 
+  .pedidos-page-container {
+    padding: 20px;
+  }
+
+  .pedidos-titulo {
+    font-size: 28px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+
+  .pedido-card {
+    padding: 20px;
+  }
+
+  .pedido-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pedido-fecha {
+    margin-left: 0;
+  }
+
+  .pedido-producto {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pedido-producto-precio {
+    align-self: flex-end;
+  }
+
+  .pedido-footer {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
 </style>
