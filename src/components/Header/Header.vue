@@ -117,7 +117,11 @@
   const handleSearch = () => {
     if (searchTerm.value.trim()) {
       emit('update:busqueda', searchTerm.value)
-      router.push(`/productos?query=${encodeURIComponent(searchTerm.value)}`)
+      router.push({
+        path: '/productos',
+        query: { query: searchTerm.value.trim() },
+        state: { from: route.fullPath },
+      })
       isMenuOpen.value = false
     }
   }

@@ -123,7 +123,7 @@
 
   onMounted(() => {
     if (!userId.value) {
-      router.push('/login', { state: { from: '/carrito' } })
+      router.push({ path: '/login', state: { from: '/carrito' } })
     }
   })
 

@@ -38,6 +38,7 @@ import ProductCard from '../../components/ProductCard/ProductCard.vue'
 import SearchFilter from '../../components/SearchFilter/SearchFilter.vue'
 import Loading from '../../components/Loading/Loading.vue'
 import getImageUrl from '../../utils/getImage'
+import { getNavigationHistoryState } from '../../utils/navigationState'
 
 const route = useRoute()
 const router = useRouter()
@@ -71,6 +72,7 @@ const realizarBusqueda = async (termino) => {
 
   try {
     const res = await fetch(`${apiUrl}/buscar?q=${encodeURIComponent(termino)}`)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()
     if (data.success) resultados.value = data.resultados
   } catch (err) {
@@ -84,7 +86,8 @@ const limpiarBusqueda = () => {
   resultados.value = []
   ordenar.value = 'defecto'
   busqueda.value = ''
-  const from = route.state?.from
+  const fromRaw = getNavigationHistoryState().from
+  const from = typeof fromRaw === 'string' ? fromRaw : undefined
   const validFrom = ['/productos/consolas', '/productos/videojuegos', '/productos/merchandising'].includes(from) ? from : null
   router.replace(validFrom || '/')
 }

@@ -170,22 +170,23 @@
 <script setup>
 
   import { ref, computed, watch } from "vue";
-  import { useRouter, useRoute } from "vue-router";
+  import { useRouter } from "vue-router";
   import { useCart } from "../../api/useCart";
   import { usePayment, addPaymentMethod, deletePaymentMethod } from "../../api/usePayment";
   import { createOrder } from "../../api/useOrders";
   import { useUserStore } from "../../stores/userStore";
   import { toast } from "../../stores/toastStore";
+  import { getNavigationHistoryState } from "../../utils/navigationState";
   import CartHeader from "../../components/CartHeader/CartHeader.vue";
   import Footer from "../../components/Footer/Footer.vue";
 
   const router = useRouter();
-  const route = useRoute();
   const userStore = useUserStore();
   const userId = computed(() => userStore.id);
 
-  const direccion = route.state?.direccion || null;
-  const total = route.state?.total || null;
+  const nav = getNavigationHistoryState();
+  const direccion = nav.direccion ?? null;
+  const total = nav.total ?? null;
 
   const { cart, loading: cartLoading } = useCart(userId);
   const { payment, loading: paymentLoading, refetchPayment } = usePayment(userId);

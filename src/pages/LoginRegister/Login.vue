@@ -63,18 +63,19 @@
 <script setup>
 
   import { reactive, onMounted } from "vue";
-  import { useRouter, useRoute } from "vue-router";
+  import { useRouter } from "vue-router";
   import SimpleHeader from "../../components/SimpleHeader/SimpleHeader.vue";
   import Footer from "../../components/Footer/Footer.vue";
   import { useUserStore } from "../../stores/userStore";
   import { toast } from "../../stores/toastStore";
   import { login } from "../../api/useAuth";
+  import { getNavigationHistoryState } from "../../utils/navigationState";
 
   const router = useRouter();
-  const route = useRoute();
   const userStore = useUserStore();
 
-  const from = route.state?.from;
+  const fromRaw = getNavigationHistoryState().from;
+  const from = typeof fromRaw === "string" ? fromRaw : undefined;
   const validFrom = ["/carrito", "/wishlist"].includes(from) ? from : null;
 
   onMounted(() => {

@@ -68,6 +68,7 @@
 
   .welcome {
     padding-bottom: 3rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   .background {
@@ -85,6 +86,7 @@
 
   .home-container {
     flex: 1;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   .section-name {
@@ -109,11 +111,24 @@
 
   .productos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-    padding: 0 24px 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 24px;
     max-width: 1400px;
     margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  @media (max-width: 1024px) {
+    .productos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .productos-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 768px) {

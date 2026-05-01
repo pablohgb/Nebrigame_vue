@@ -84,7 +84,7 @@ const userId = computed(() => userStore.id)
 
 onMounted(() => {
   if (!userId.value) {
-    router.push('/login', { state: { from: '/wishlist' } })
+    router.push({ path: '/login', state: { from: '/wishlist' } })
   }
 })
 
