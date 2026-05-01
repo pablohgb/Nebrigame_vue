@@ -9,6 +9,9 @@ import Wishlist from '../pages/Wishlist/Wishlist.vue'
 import Profile from '../pages/Profile/Profile.vue'
 import Orders from '../pages/Orders/Orders.vue'
 import Cart from '../pages/Cart/Cart.vue'
+import Shipping from '../pages/Shipping/Shipping.vue'
+import Payment from '../pages/Payment/Payment.vue'
+
 
 
 
@@ -18,15 +21,17 @@ const router = createRouter({
     { path: '/', component: Home },
     // { path: '/', name: 'Home', component: Home },
     { path: '/login', component: Login}, 
-    { path: '/register', component: Register},
-    { path: '/:pathMatch(.*)*', component: NotFound }, 
+    { path: '/registro', component: Register},
     { path: '/productos', component: Product }, 
     { path: '/productos/:tipo', component: Product },
     { path: '/producto/:tipo/:id', component: ProductDetail }, 
     { path: '/wishlist', component: Wishlist }, 
     { path: '/perfil', component: Profile },
     { path: '/pedidos', component: Orders }, 
-    { path: '/carrito', component: Cart }
+    { path: '/carrito', component: Cart }, 
+    { path: '/envio', component: Shipping },
+    { path: '/pago', component: Payment },
+    { path: '/:pathMatch(.*)*', component: NotFound }
   ]
 })
 

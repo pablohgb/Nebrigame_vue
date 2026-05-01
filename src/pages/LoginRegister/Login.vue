@@ -1,5 +1,4 @@
 <template>
-
   <div class="page-wrapper">
     <div class="background-login">
       <SimpleHeader />
@@ -13,25 +12,43 @@
           <form @submit.prevent="handleSubmit" class="auth-form-log">
             <div class="form-group-log">
               <label for="email">Email</label>
-              <input type="email" id="email" v-model="formData.email" placeholder="tu@email.com" />
+              <input
+                type="email"
+                id="email"
+                v-model="formData.email"
+                placeholder="tu@email.com"
+              />
             </div>
 
             <div class="form-group-log">
               <label for="contrasenna">Contraseña</label>
-              <input type="password" id="contrasenna" v-model="formData.contrasenna" placeholder="••••••••" />
+              <input
+                type="password"
+                id="contrasenna"
+                v-model="formData.contrasenna"
+                placeholder="••••••••"
+              />
             </div>
 
             <div class="form-footer-log">
-              <a href="#" class="forgot-password-log">¿Olvidaste tu contraseña?</a>
+              <a href="#" class="forgot-password-log"
+                >¿Olvidaste tu contraseña?</a
+              >
             </div>
 
             <div class="btn-cont-log">
-              <button type="submit" class="btn-primary-log">Iniciar Sesión</button>
+              <button type="submit" class="btn-primary-log">
+                Iniciar Sesión
+              </button>
             </div>
 
             <div class="auth-switch-log">
               <p>¿No tienes una cuenta?</p>
-              <button type="button" @click="router.push('/registro')" class="btn-link-log">
+              <button
+                type="button"
+                @click="router.push('/registro')"
+                class="btn-link-log"
+              >
                 Regístrate aquí
               </button>
             </div>
@@ -41,70 +58,69 @@
     </div>
     <Footer />
   </div>
-
 </template>
-
 
 <script setup>
 
-  import { reactive, onMounted } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-  import SimpleHeader from '../../components/SimpleHeader/SimpleHeader.vue'
-  import Footer from '../../components/Footer/Footer.vue'
-  import { useUserStore } from '../../stores/userStore'
-  import { toast } from '../../stores/toastStore'
-  import { login } from '../../api/useAuth'
+  import { reactive, onMounted } from "vue";
+  import { useRouter, useRoute } from "vue-router";
+  import SimpleHeader from "../../components/SimpleHeader/SimpleHeader.vue";
+  import Footer from "../../components/Footer/Footer.vue";
+  import { useUserStore } from "../../stores/userStore";
+  import { toast } from "../../stores/toastStore";
+  import { login } from "../../api/useAuth";
 
-  const router = useRouter()
-  const route = useRoute()
-  const userStore = useUserStore()
+  const router = useRouter();
+  const route = useRoute();
+  const userStore = useUserStore();
 
-  const from = route.state?.from
-  const validFrom = ['/carrito', '/wishlist'].includes(from) ? from : null
+  const from = route.state?.from;
+  const validFrom = ["/carrito", "/wishlist"].includes(from) ? from : null;
 
   onMounted(() => {
     if (userStore.id) {
-      router.replace(validFrom || '/')
+      router.replace(validFrom || "/");
     }
-  })
+  });
 
   const formData = reactive({
-    email: '',
-    contrasenna: ''
-  })
+    email: "",
+    contrasenna: "",
+  });
 
   const handleSubmit = async () => {
     if (!formData.email || !formData.contrasenna) {
-      toast.error('Por favor, rellena todos los campos')
-      return
+      toast.error("Por favor, rellena todos los campos");
+      return;
     }
 
     try {
-      const data = await login(formData.email, formData.contrasenna)
+      const data = await login(formData.email, formData.contrasenna);
       userStore.setUsuario(
         data.usuarioData.id,
         data.usuarioData.nombre,
         data.usuarioData.apellido1,
         data.usuarioData.apellido2,
         data.usuarioData.email,
-        data.usuarioData.fecha_registro
-      )
-      toast.success('Sesión iniciada, bienvenido de nuevo ' + data.usuarioData.nombre)
-      router.replace(validFrom || '/')
+        data.usuarioData.fecha_registro,
+      );
+      toast.success(
+        "Sesión iniciada, bienvenido de nuevo " + data.usuarioData.nombre,
+      );
+      router.replace(validFrom || "/");
     } catch (error) {
-      toast.error(error.message)
-      formData.email = ''
-      formData.contrasenna = ''
+      toast.error(error.message);
+      formData.email = "";
+      formData.contrasenna = "";
     }
-  }
-
+  };
 </script>
 
 
 <style scoped>
 
   .background-login {
-    background-image: url('../../assets/images/backgroundLogin.jpeg');
+    background-image: url("../../assets/images/backgroundLogin.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -131,8 +147,14 @@
   }
 
   @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .auth-header-log {
@@ -186,8 +208,12 @@
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   }
 
-  .form-group-log input::placeholder { color: #999; }
-  .form-group-log input:hover { border-color: #c0c0c0; }
+  .form-group-log input::placeholder {
+    color: #999;
+  }
+  .form-group-log input:hover {
+    border-color: #c0c0c0;
+  }
 
   .form-footer-log {
     display: flex;
@@ -222,7 +248,10 @@
     margin-top: 8px;
   }
 
-  .btn-cont-log { display: flex; justify-content: center; }
+  .btn-cont-log {
+    display: flex;
+    justify-content: center;
+  }
 
   .btn-primary-log:hover {
     transform: translateY(-2px);
@@ -268,8 +297,6 @@
     margin: 0;
   }
 
-  /* FIXME - Arreglar formato */
-
   @media (max-width: 768px) {
     .auth-container-log {
       min-height: auto;
@@ -277,19 +304,51 @@
       justify-content: center;
       padding-top: 80px;
     }
-    .auth-card-log { padding: 35px 25px; }
-    .auth-header-log h1 { font-size: 26px; }
-    .auth-form-log { gap: 16px; }
+
+    .auth-card-log {
+      padding: 35px 25px;
+    }
+
+    .auth-header-log h1 {
+      font-size: 26px;
+    }
+
+    .auth-form-log {
+      gap: 16px;
+    }
   }
 
   @media (max-width: 480px) {
-    .auth-container-log { padding: 30px 15px; }
-    .auth-card-log { padding: 30px 20px; }
-    .auth-header-log h1 { font-size: 24px; }
-    .auth-header-log p { font-size: 13px; }
-    .form-group-log input { padding: 11px 14px; font-size: 14px; }
-    .btn-primary-log { padding: 13px 18px; font-size: 15px; }
-    .auth-switch-log { flex-direction: column; gap: 4px; }
+    .auth-container-log {
+      padding: 30px 15px;
+    }
+
+    .auth-card-log {
+      padding: 30px 20px;
+    }
+
+    .auth-header-log h1 {
+      font-size: 24px;
+    }
+
+    .auth-header-log p {
+      font-size: 13px;
+    }
+
+    .form-group-log input {
+      padding: 11px 14px;
+      font-size: 14px;
+    }
+
+    .btn-primary-log {
+      padding: 13px 18px;
+      font-size: 15px;
+    }
+
+    .auth-switch-log {
+      flex-direction: column;
+      gap: 4px;
+    }
   }
 
 </style>

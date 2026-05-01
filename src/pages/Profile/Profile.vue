@@ -169,183 +169,185 @@
         </div>
       </div>
     </div>
-
     <Footer />
   </div>
 </template>
 
+
 <script setup>
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { X } from 'lucide-vue-next'
-import { useUserStore } from '../../stores/userStore'
-import { updateProfile, deleteProfile } from '../../api/useAuth'
-import { toast } from '../../stores/toastStore'
-import Header from '../../components/Header/Header.vue'
-import Footer from '../../components/Footer/Footer.vue'
 
-const router = useRouter()
-const userStore = useUserStore()
+  import { ref, reactive } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { X } from 'lucide-vue-next'
+  import { useUserStore } from '../../stores/userStore'
+  import { updateProfile, deleteProfile } from '../../api/useAuth'
+  import { toast } from '../../stores/toastStore'
+  import Header from '../../components/Header/Header.vue'
+  import Footer from '../../components/Footer/Footer.vue'
 
-const DELETE_MODALS = [
-  { msg: '¿Eliminar tu cuenta? Esta acción no se puede deshacer.', pos: 'top-left' },
-  { msg: '¿Estás SEGURO? Todos tus pedidos, wishlist y datos... ¡desaparecerán para siempre!', pos: 'top-right' },
-  { msg: 'Los juegos de tu biblioteca te llorarán. Las ranas del carrito también. ¿Continuar?', pos: 'bottom-right' },
-  { msg: 'Ya está. Que la fuerza te acompañe... en otra cuenta. Adiós. 👋', pos: 'bottom-left' },
-]
+  const router = useRouter()
+  const userStore = useUserStore()
 
-const tabActiva = ref('info')
-const modalAbierto = ref(false)
-const tipoModal = ref('')
-const deleteModalStep = ref(0)
-const deletingAccount = ref(false)
+  const DELETE_MODALS = [
+    { msg: '¿Eliminar tu cuenta? Esta acción no se puede deshacer.', pos: 'top-left' },
+    { msg: '¿Estás SEGURO? Todos tus pedidos, wishlist y datos... ¡desaparecerán para siempre!', pos: 'top-right' },
+    { msg: 'Los juegos de tu biblioteca te llorarán. Las ranas del carrito también. ¿Continuar?', pos: 'bottom-right' },
+    { msg: 'Ya está. Que la fuerza te acompañe... en otra cuenta. Adiós. 👋', pos: 'bottom-left' },
+  ]
 
-const formInfo = reactive({
-  nombre: userStore.nombre,
-  apellido1: userStore.apellido1,
-  apellido2: userStore.apellido2,
-  email: userStore.email
-})
+  const tabActiva = ref('info')
+  const modalAbierto = ref(false)
+  const tipoModal = ref('')
+  const deleteModalStep = ref(0)
+  const deletingAccount = ref(false)
 
-const loadingInfo = ref(false)
-const mensajeInfo = ref(null)
-const errorInfo = ref(null)
+  const formInfo = reactive({
+    nombre: userStore.nombre,
+    apellido1: userStore.apellido1,
+    apellido2: userStore.apellido2,
+    email: userStore.email
+  })
 
-const formPass = reactive({ contrasennaActual: '', contrasennaNueva: '', confirmar: '' })
-const loadingPass = ref(false)
-const mensajePass = ref(null)
-const errorPass = ref(null)
+  const loadingInfo = ref(false)
+  const mensajeInfo = ref(null)
+  const errorInfo = ref(null)
 
-const abrirModal = (tipo) => {
-  tipoModal.value = tipo
-  modalAbierto.value = true
-  mensajeInfo.value = null
-  errorInfo.value = null
-  mensajePass.value = null
-  errorPass.value = null
-}
+  const formPass = reactive({ contrasennaActual: '', contrasennaNueva: '', confirmar: '' })
+  const loadingPass = ref(false)
+  const mensajePass = ref(null)
+  const errorPass = ref(null)
 
-const cerrarModal = () => {
-  modalAbierto.value = false
-  tipoModal.value = ''
-}
-
-const abrirModalEliminar = () => { deleteModalStep.value = 1 }
-const cerrarModalEliminar = () => { deleteModalStep.value = 0 }
-
-const confirmarEliminar = () => {
-  if (deleteModalStep.value < 4) {
-    deleteModalStep.value++
-  } else {
-    ejecutarEliminacion()
-  }
-}
-
-const ejecutarEliminacion = async () => {
-  const userId = userStore.id != null && !isNaN(Number(userStore.id)) ? Number(userStore.id) : null
-  if (!userId) {
-    toast.error('No se pudo identificar tu cuenta. Intenta cerrar sesión y volver a iniciar.')
-    deleteModalStep.value = 0
-    return
+  const abrirModal = (tipo) => {
+    tipoModal.value = tipo
+    modalAbierto.value = true
+    mensajeInfo.value = null
+    errorInfo.value = null
+    mensajePass.value = null
+    errorPass.value = null
   }
 
-  deletingAccount.value = true
-  try {
-    await deleteProfile(userId)
-    userStore.logout()
-    toast.success('Cuenta eliminada')
-    router.replace('/')
-  } catch (err) {
-    toast.error(err.message || 'Error al eliminar la cuenta')
-    deleteModalStep.value = 0
-  } finally {
-    deletingAccount.value = false
+  const cerrarModal = () => {
+    modalAbierto.value = false
+    tipoModal.value = ''
   }
-}
 
-const handleGuardarInfo = async () => {
-  loadingInfo.value = true
-  mensajeInfo.value = null
-  errorInfo.value = null
+  const abrirModalEliminar = () => { deleteModalStep.value = 1 }
+  const cerrarModalEliminar = () => { deleteModalStep.value = 0 }
 
-  try {
-    if (
-      formInfo.nombre === userStore.nombre &&
-      formInfo.apellido1 === userStore.apellido1 &&
-      formInfo.apellido2 === userStore.apellido2 &&
-      formInfo.email === userStore.email
-    ) {
-      errorInfo.value = 'No hay cambios para guardar'
-    } else if (!formInfo.nombre) {
-      errorInfo.value = 'El nombre no puede estar vacío'
-    } else if (!formInfo.apellido1) {
-      errorInfo.value = 'El primer apellido no puede estar vacío'
-    } else if (!formInfo.email) {
-      errorInfo.value = 'El email no puede estar vacío'
+  const confirmarEliminar = () => {
+    if (deleteModalStep.value < 4) {
+      deleteModalStep.value++
     } else {
-      await updateProfile(userStore.id, {
-        nombre: formInfo.nombre,
-        apellido1: formInfo.apellido1,
-        apellido2: formInfo.apellido2,
-        email: formInfo.email
-      })
-      userStore.setUsuario(
-        userStore.id,
-        formInfo.nombre,
-        formInfo.apellido1,
-        formInfo.apellido2,
-        formInfo.email,
-        userStore.fecha_registro
-      )
-      mensajeInfo.value = 'Datos actualizados correctamente'
-      setTimeout(() => cerrarModal(), 1500)
+      ejecutarEliminacion()
     }
-  } catch (err) {
-    errorInfo.value = err.message || 'Error al actualizar los datos'
-  } finally {
-    loadingInfo.value = false
-  }
-}
-
-const handleGuardarPass = async () => {
-  mensajePass.value = null
-  errorPass.value = null
-
-  if (formPass.contrasennaNueva !== formPass.confirmar) {
-    errorPass.value = 'Las contraseñas nuevas no coinciden'
-    return
-  } else if (!formPass.contrasennaNueva) {
-    errorPass.value = 'La contraseña nueva no puede estar vacía'
-    return
-  } else if (!formPass.contrasennaActual) {
-    errorPass.value = 'La contraseña actual no puede estar vacía'
-    return
-  } else if (formPass.contrasennaNueva === formPass.contrasennaActual) {
-    errorPass.value = 'La contraseña nueva no puede ser igual a la actual'
-    return
   }
 
-  loadingPass.value = true
-  try {
-    await updateProfile(userStore.id, {
-      contrasenna: formPass.contrasennaNueva,
-      contrasennaActual: formPass.contrasennaActual
-    })
-    mensajePass.value = 'Contraseña actualizada correctamente'
-    formPass.contrasennaActual = ''
-    formPass.contrasennaNueva = ''
-    formPass.confirmar = ''
-    setTimeout(() => cerrarModal(), 1500)
-  } catch (err) {
-    errorPass.value = err.message || 'Error al actualizar la contraseña'
-  } finally {
-    loadingPass.value = false
+  const ejecutarEliminacion = async () => {
+    const userId = userStore.id != null && !isNaN(Number(userStore.id)) ? Number(userStore.id) : null
+    if (!userId) {
+      toast.error('No se pudo identificar tu cuenta. Intenta cerrar sesión y volver a iniciar.')
+      deleteModalStep.value = 0
+      return
+    }
+
+    deletingAccount.value = true
+    try {
+      await deleteProfile(userId)
+      userStore.logout()
+      toast.success('Cuenta eliminada')
+      router.replace('/')
+    } catch (err) {
+      toast.error(err.message || 'Error al eliminar la cuenta')
+      deleteModalStep.value = 0
+    } finally {
+      deletingAccount.value = false
+    }
   }
-}
+
+  const handleGuardarInfo = async () => {
+    loadingInfo.value = true
+    mensajeInfo.value = null
+    errorInfo.value = null
+
+    try {
+      if (
+        formInfo.nombre === userStore.nombre &&
+        formInfo.apellido1 === userStore.apellido1 &&
+        formInfo.apellido2 === userStore.apellido2 &&
+        formInfo.email === userStore.email
+      ) {
+        errorInfo.value = 'No hay cambios para guardar'
+      } else if (!formInfo.nombre) {
+        errorInfo.value = 'El nombre no puede estar vacío'
+      } else if (!formInfo.apellido1) {
+        errorInfo.value = 'El primer apellido no puede estar vacío'
+      } else if (!formInfo.email) {
+        errorInfo.value = 'El email no puede estar vacío'
+      } else {
+        await updateProfile(userStore.id, {
+          nombre: formInfo.nombre,
+          apellido1: formInfo.apellido1,
+          apellido2: formInfo.apellido2,
+          email: formInfo.email
+        })
+        userStore.setUsuario(
+          userStore.id,
+          formInfo.nombre,
+          formInfo.apellido1,
+          formInfo.apellido2,
+          formInfo.email,
+          userStore.fecha_registro
+        )
+        mensajeInfo.value = 'Datos actualizados correctamente'
+        setTimeout(() => cerrarModal(), 1500)
+      }
+    } catch (err) {
+      errorInfo.value = err.message || 'Error al actualizar los datos'
+    } finally {
+      loadingInfo.value = false
+    }
+  }
+
+  const handleGuardarPass = async () => {
+    mensajePass.value = null
+    errorPass.value = null
+
+    if (formPass.contrasennaNueva !== formPass.confirmar) {
+      errorPass.value = 'Las contraseñas nuevas no coinciden'
+      return
+    } else if (!formPass.contrasennaNueva) {
+      errorPass.value = 'La contraseña nueva no puede estar vacía'
+      return
+    } else if (!formPass.contrasennaActual) {
+      errorPass.value = 'La contraseña actual no puede estar vacía'
+      return
+    } else if (formPass.contrasennaNueva === formPass.contrasennaActual) {
+      errorPass.value = 'La contraseña nueva no puede ser igual a la actual'
+      return
+    }
+
+    loadingPass.value = true
+    try {
+      await updateProfile(userStore.id, {
+        contrasenna: formPass.contrasennaNueva,
+        contrasennaActual: formPass.contrasennaActual
+      })
+      mensajePass.value = 'Contraseña actualizada correctamente'
+      formPass.contrasennaActual = ''
+      formPass.contrasennaNueva = ''
+      formPass.confirmar = ''
+      setTimeout(() => cerrarModal(), 1500)
+    } catch (err) {
+      errorPass.value = err.message || 'Error al actualizar la contraseña'
+    } finally {
+      loadingPass.value = false
+    }
+  }
 </script>
 
+
 <style scoped>
-/* FIXME - Arreglar formato */
+
   .background-profile {
     background-image: url('../../assets/images/perfilBackground.jpeg');
     background-size: cover;
@@ -444,9 +446,15 @@ const handleGuardarPass = async () => {
     transition: all 0.2s;
   }
 
-  .perfil-btn-editar:hover { background: #65319c; }
+  .perfil-btn-editar:hover { 
+    background: #65319c; 
+  }
 
-  .perfil-detalles { display: flex; flex-direction: column; gap: 20px; }
+  .perfil-detalles { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+  }
 
   .perfil-detalle {
     display: flex;
@@ -456,12 +464,39 @@ const handleGuardarPass = async () => {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
 
-  .perfil-detalle:last-child { border-bottom: none; padding-bottom: 0; }
-  .perfil-label { color: rgba(255, 255, 255, 0.8); font-size: 14px; font-weight: 500; }
-  .perfil-valor { color: #ffffff; font-size: 16px; font-weight: 600; }
-  .perfil-form { display: flex; flex-direction: column; gap: 16px; }
-  .perfil-campo { display: flex; flex-direction: column; gap: 6px; }
-  .perfil-campo label { color: rgba(255, 255, 255, 0.9); font-size: 14px; font-weight: 500; }
+  .perfil-detalle:last-child { 
+    border-bottom: none; 
+    padding-bottom: 0; 
+  }
+
+  .perfil-label { 
+    color: rgba(255, 255, 255, 0.8); 
+    font-size: 14px; font-weight: 500; 
+  }
+
+  .perfil-valor { 
+    color: #ffffff; 
+    font-size: 16px; 
+    font-weight: 600; 
+  }
+
+  .perfil-form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 16px; 
+  }
+
+  .perfil-campo { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 6px; 
+  }
+
+  .perfil-campo label { 
+    color: rgba(255, 255, 255, 0.9); 
+    font-size: 14px; 
+    font-weight: 500; 
+  }
 
   .perfil-campo input {
     padding: 12px 16px;
@@ -480,7 +515,9 @@ const handleGuardarPass = async () => {
     background: rgba(255, 255, 255, 0.25);
   }
 
-  .perfil-campo input::placeholder { color: rgba(255, 255, 255, 0.5); }
+  .perfil-campo input::placeholder { 
+    color: rgba(255, 255, 255, 0.5); 
+  }
 
   .perfil-btn {
     margin-top: 8px;
@@ -497,13 +534,41 @@ const handleGuardarPass = async () => {
     font-family: inherit;
   }
 
-  .perfil-btn:hover { background: #65319c; }
-  .perfil-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .perfil-exito { color: #4ade80; font-size: 14px; margin: 0; font-weight: 500; }
-  .perfil-error { color: #fca5a5; font-size: 14px; margin: 0; font-weight: 500; }
+  .perfil-btn:hover { 
+    background: #65319c; 
+  }
 
-  .ajustes-grupo { display: flex; flex-direction: column; gap: 20px; }
-  .ajustes-subgrupo { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+  .perfil-btn:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+  }
+
+  .perfil-exito { 
+    color: #4ade80; 
+    font-size: 14px; 
+    margin: 0; 
+    font-weight: 500; 
+  }
+
+  .perfil-error { 
+    color: #fca5a5; 
+    font-size: 14px; 
+    margin: 0; 
+    font-weight: 500; 
+  }
+
+  .ajustes-grupo { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+  }
+
+  .ajustes-subgrupo { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    align-items: center; 
+  }
 
   .ajuste-item {
     display: flex;
@@ -515,8 +580,18 @@ const handleGuardarPass = async () => {
     border-radius: 8px;
   }
 
-  .ajuste-info h3 { margin: 0 0 4px 0; color: #ffffff; font-size: 16px; font-weight: 600; }
-  .ajuste-info p { margin: 0; color: rgba(255, 255, 255, 0.7); font-size: 14px; }
+  .ajuste-info h3 { 
+    margin: 0 0 4px 0; 
+    color: #ffffff; 
+    font-size: 16px; 
+    font-weight: 600; 
+  }
+
+  .ajuste-info p { 
+    margin: 0; 
+    color: rgba(255, 255, 255, 0.7); 
+    font-size: 14px; 
+  }
 
   .ajuste-switch {
     position: relative;
@@ -526,7 +601,11 @@ const handleGuardarPass = async () => {
     flex-shrink: 0;
   }
 
-  .ajuste-switch input { opacity: 0; width: 0; height: 0; }
+  .ajuste-switch input { 
+    opacity: 0; 
+    width: 0; 
+    height: 0; 
+  }
 
   .ajuste-slider {
     position: absolute;
@@ -549,10 +628,26 @@ const handleGuardarPass = async () => {
     border-radius: 50%;
   }
 
-  .ajuste-switch input:checked + .ajuste-slider { background-color: #7439b3; }
-  .ajuste-switch input:checked + .ajuste-slider:before { transform: translateX(24px); }
-  .ajustes-separador { height: 2px; background: rgba(255, 255, 255, 0.2); margin: 24px 0; }
-  .ajustes-subtitulo { color: #ffffff; font-size: 18px; font-weight: 600; margin: 0 0 16px 0; }
+  .ajuste-switch input:checked + .ajuste-slider { 
+    background-color: #7439b3; 
+  }
+
+  .ajuste-switch input:checked + .ajuste-slider:before { 
+    transform: translateX(24px); 
+  }
+
+  .ajustes-separador { 
+    height: 2px; 
+    background: rgba(255, 255, 255, 0.2); 
+    margin: 24px 0; 
+  }
+
+  .ajustes-subtitulo { 
+    color: #ffffff; 
+    font-size: 18px; 
+    font-weight: 600; 
+    margin: 0 0 16px 0; 
+  }
 
   .perfil-btn-peligro {
     padding: 12px 24px;
@@ -568,8 +663,15 @@ const handleGuardarPass = async () => {
     width: fit-content;
   }
 
-  .perfil-btn-peligro:hover { background: linear-gradient(135deg, #c0392b 0%, #a93226 100%); }
-  .ajustes-advertencia { color: rgba(255, 255, 255, 0.7); font-size: 14px; margin: 12px 0 0 0; }
+  .perfil-btn-peligro:hover { 
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%); 
+  }
+
+  .ajustes-advertencia { 
+    color: rgba(255, 255, 255, 0.7); 
+    font-size: 14px; 
+    margin: 12px 0 0 0; 
+  }
 
   .modal-overlay {
     position: fixed;
@@ -607,13 +709,43 @@ const handleGuardarPass = async () => {
     to { opacity: 1; transform: scale(1); }
   }
 
-  .modal-delete--top-left { top: 15%; left: 8%; }
-  .modal-delete--top-right { top: 15%; right: 8%; left: auto; }
-  .modal-delete--bottom-right { bottom: 15%; right: 8%; left: auto; top: auto; }
-  .modal-delete--bottom-left { bottom: 15%; left: 8%; top: auto; }
+  .modal-delete--top-left { 
+    top: 15%; 
+    left: 8%; 
+  }
 
-  .modal-delete-msg { color: #fff; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0; font-weight: 500; }
-  .modal-delete-actions { display: flex; gap: 12px; justify-content: flex-end; }
+  .modal-delete--top-right { 
+    top: 15%; 
+    right: 8%; 
+    left: auto; 
+  }
+
+  .modal-delete--bottom-right { 
+    bottom: 15%; 
+    right: 8%; 
+    left: auto; 
+    top: auto; 
+  }
+
+  .modal-delete--bottom-left { 
+    bottom: 15%; 
+    left: 8%; 
+    top: auto; 
+  }
+
+  .modal-delete-msg { 
+    color: #fff; 
+    font-size: 16px; 
+    line-height: 1.5; 
+    margin: 0 0 20px 0; 
+    font-weight: 500; 
+  }
+
+  .modal-delete-actions { 
+    display: flex; 
+    gap: 12px; 
+    justify-content: flex-end; 
+  }
 
   .modal-delete-btn {
     padding: 10px 20px;
@@ -631,10 +763,23 @@ const handleGuardarPass = async () => {
     color: white;
   }
 
-  .modal-delete-btn--cancel:hover { background: rgba(255, 255, 255, 0.3); }
-  .modal-delete-btn--confirm { background: #e74c3c; border: none; color: white; }
-  .modal-delete-btn--confirm:hover:not(:disabled) { background: #c0392b; }
-  .modal-delete-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .modal-delete-btn--cancel:hover { 
+    background: rgba(255, 255, 255, 0.3); 
+  }
+
+  .modal-delete-btn--confirm { 
+    background: #e74c3c; 
+    border: none; 
+    color: white; }
+
+  .modal-delete-btn--confirm:hover:not(:disabled) { 
+    background: #c0392b; 
+  }
+
+  .modal-delete-btn:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+  }
 
   .modal-contenido {
     background: #8a63b4;
@@ -654,7 +799,12 @@ const handleGuardarPass = async () => {
     margin-bottom: 24px;
   }
 
-  .modal-header h2 { margin: 0; font-size: 24px; color: #ffffff; font-weight: 600; }
+  .modal-header h2 { 
+    margin: 0; 
+    font-size: 24px; 
+    color: #ffffff; 
+    font-weight: 600; 
+  }
 
   .modal-cerrar {
     background: rgba(255, 255, 255, 0.2);
@@ -671,13 +821,30 @@ const handleGuardarPass = async () => {
     height: 36px;
   }
 
-  .modal-cerrar:hover { background: rgba(255, 255, 255, 0.3); }
+  .modal-cerrar:hover { 
+    background: rgba(255, 255, 255, 0.3); 
+  }
 
   @media (max-width: 768px) {
-    .modal-delete--top-left { top: 10%; left: 5%; }
-    .modal-delete--top-right { top: 10%; right: 5%; }
-    .modal-delete--bottom-right { bottom: 10%; right: 5%; }
-    .modal-delete--bottom-left { bottom: 10%; left: 5%; }
+    .modal-delete--top-left { 
+      top: 10%; 
+      left: 5%; 
+    }
+
+    .modal-delete--top-right { 
+      top: 10%; 
+      right: 5%; 
+    }
+
+    .modal-delete--bottom-right { 
+      bottom: 10%; 
+      right: 5%; 
+    }
+
+    .modal-delete--bottom-left { 
+      bottom: 10%; 
+      left: 5%; 
+    }
 
     .perfil-container {
       flex-direction: column;
@@ -701,8 +868,14 @@ const handleGuardarPass = async () => {
       text-align: center;
     }
 
-    .perfil-seccion { padding: 20px; border-radius: 8px; }
-    .perfil-seccion h2 { font-size: 18px; }
+    .perfil-seccion { 
+      padding: 20px; 
+      border-radius: 8px; 
+    }
+
+    .perfil-seccion h2 { 
+      font-size: 18px; 
+    }
 
     .perfil-seccion-header {
       flex-direction: column;
@@ -710,22 +883,64 @@ const handleGuardarPass = async () => {
       gap: 12px;
     }
 
-    .perfil-btn-editar { width: 100%; }
-    .perfil-detalles { gap: 16px; }
-    .perfil-detalle { padding-bottom: 16px; }
-    .perfil-label { font-size: 13px; }
-    .perfil-valor { font-size: 15px; word-break: break-word; }
-    .perfil-btn { width: 100%; text-align: center; }
-    .perfil-btn-peligro { width: 100%; }
-    .modal-contenido { padding: 20px; margin: 10px; }
-    .modal-header h2 { font-size: 20px; }
+    .perfil-btn-editar { 
+      width: 100%; 
+    }
+
+    .perfil-detalles { 
+      gap: 16px; 
+    }
+
+    .perfil-detalle { 
+      padding-bottom: 16px; 
+    }
+
+    .perfil-label { 
+      font-size: 13px; 
+    }
+
+    .perfil-valor { 
+      font-size: 15px; 
+      word-break: break-word; 
+    }
+
+    .perfil-btn { 
+      width: 100%; 
+      text-align: center; 
+    }
+
+    .perfil-btn-peligro { 
+      width: 100%; 
+    }
+
+    .modal-contenido { 
+      padding: 20px; 
+      margin: 10px; 
+    }
+
+    .modal-header h2 { 
+      font-size: 20px; 
+    }
   }
 
   @media (max-width: 480px) {
-    .perfil-container { padding: 0 12px; gap: 20px; }
-    .perfil-seccion { padding: 16px; }
-    .perfil-seccion h2 { font-size: 16px; margin-bottom: 16px; }
-    .perfil-detalles { gap: 12px; }
+    .perfil-container { 
+      padding: 0 12px; 
+      gap: 20px; 
+    }
+
+    .perfil-seccion { 
+      padding: 16px; 
+    }
+
+    .perfil-seccion h2 { 
+      font-size: 16px; 
+      margin-bottom: 16px; 
+    }
+
+    .perfil-detalles { 
+      gap: 12px; 
+    }
 
     .perfil-campo input {
       padding: 10px 14px;
@@ -739,7 +954,11 @@ const handleGuardarPass = async () => {
       font-size: 14px;
     }
 
-    .perfil-tab { padding: 8px 12px; font-size: 13px; min-width: 100px; }
+    .perfil-tab { 
+      padding: 8px 12px; 
+      font-size: 13px; 
+      min-width: 100px; 
+    }
 
     .ajuste-item {
       padding: 12px;
@@ -748,7 +967,9 @@ const handleGuardarPass = async () => {
       gap: 12px;
     }
 
-    .ajuste-switch { align-self: flex-end; }
+    .ajuste-switch { 
+      align-self: flex-end; 
+    }
   }
 
 </style>
