@@ -7,6 +7,8 @@ import Product from '../pages/Product/Product.vue'
 import ProductDetail from '../pages/ProductDetail/ProductDetail.vue'
 import Wishlist from '../pages/Wishlist/Wishlist.vue'
 import Profile from '../pages/Profile/Profile.vue'
+import Orders from '../pages/Orders/Orders.vue'
+import Cart from '../pages/Cart/Cart.vue'
 
 
 
@@ -22,11 +24,9 @@ const router = createRouter({
     { path: '/productos/:tipo', component: Product },
     { path: '/producto/:tipo/:id', component: ProductDetail }, 
     { path: '/wishlist', component: Wishlist }, 
-    { path: '/profile', component: Profile },
-    
-
-
-  
+    { path: '/perfil', component: Profile },
+    { path: '/pedidos', component: Orders }, 
+    { path: '/carrito', component: Cart }
   ]
 })
 
