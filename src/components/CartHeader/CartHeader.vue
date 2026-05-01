@@ -242,6 +242,8 @@
     margin: 0;
   }
 
+/* FIXME - Arreglar formato */
+
   @media (max-width: 1226px) {
     .navbar-cart { margin: 0 10px; }
     .checkout-steps-cart { gap: 20px; }

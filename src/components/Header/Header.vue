@@ -284,15 +284,36 @@
   }
 
   @media (max-width: 1226px) {
-    .navbar { margin: 0 10px 0 0; }
-    .nav-links { gap: 0.4rem; margin-left: 30px; }
-    .nav-links-right { gap: 0.4rem; }
-    .nav-links a { padding: 0.5rem 1rem; font-size: 0.9rem; }
-    .hola-usuario { padding: 0.5rem 1rem; font-size: 0.9rem; }
+    .navbar { 
+      margin: 0 10px 0 0; 
+    }
+
+    .nav-links { 
+      gap: 0.4rem; 
+      margin-left: 30px; 
+    }
+
+    .nav-links-right { 
+      gap: 0.4rem; }
+
+    .nav-links a { 
+      padding: 0.5rem 1rem; 
+      font-size: 0.9rem; 
+    }
+
+    .hola-usuario { 
+      padding: 0.5rem 1rem; 
+      font-size: 0.9rem; 
+    }
   }
 
+/* FIXME - Arreglar el formato */
+
   @media (max-width: 1150px) {
-    .navbar { margin: 0 5px 0 0; }
+    .navbar { 
+      margin: 0 5px 0 0; 
+    }
+    
     .nav-links { gap: 0.3rem; margin-left: 20px; }
     .nav-links-right { gap: 0.3rem; }
     .nav-links a { padding: 0.4rem 0.8rem; font-size: 0.85rem; }

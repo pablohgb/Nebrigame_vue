@@ -63,3 +63,48 @@
   })
 
 </script>
+
+<style scoped>
+
+  .welcome {
+    padding-bottom: 3rem;
+  }
+
+  .background {
+    background-image: url('../../assets/images/fondo_home.jpg');
+    height: auto;
+    width: auto;
+  }
+
+  .hero {
+    color: rgb(255, 255, 255);
+    padding: 4rem 2rem;
+    margin-bottom: 3rem;
+    text-align: left;
+  }
+
+  .home-container {
+    flex: 1;
+  }
+
+  .section-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.4rem;
+  }
+
+  .featured-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+  }
+
+  @media (max-width: 768px) {
+    .background {
+      height: 100%;
+    }
+  }
+
+</style>
