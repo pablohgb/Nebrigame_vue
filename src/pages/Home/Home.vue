@@ -101,6 +101,21 @@
     color: #2c3e50;
   }
 
+  .page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 0 24px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
   @media (max-width: 768px) {
     .background {
       height: 100%;

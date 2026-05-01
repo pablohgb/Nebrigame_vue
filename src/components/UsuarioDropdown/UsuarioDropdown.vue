@@ -12,7 +12,7 @@
       </div>
     </template>
     <template v-else>
-      <RouterLink to="/login">
+      <RouterLink to="/login" class="hola-usuario">
         <User :size="24" />
       </RouterLink>
     </template>

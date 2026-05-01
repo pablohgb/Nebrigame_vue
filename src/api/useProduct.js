@@ -113,7 +113,7 @@ const useProductStock = (productoId) => {
         }
     }
 
-    watch(() => productoId, (id) => fetchStock(id), { immediate: true })
+    watch(productoId, (id) => fetchStock(id), { immediate: true })
     onUnmounted(() => controller?.abort())
 
     return { stock, plataformas, loading }

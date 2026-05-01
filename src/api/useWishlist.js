@@ -86,7 +86,7 @@ const useIsInWishlist = (userId, productId) => {
         }
     }
 
-    watch(() => [userId, productId], ([uId, pId]) => fetchIsInWishlist(uId, pId), { immediate: true })
+    watch([userId, productId], ([uId, pId]) => fetchIsInWishlist(uId, pId), { immediate: true })
     onUnmounted(() => controller?.abort())
 
     return { isInWishlist, loading }
