@@ -1,5 +1,3 @@
-#TODO - MIRAR BIEN ESTO
-
 <template>
 
   <div class="page-wrapper">
@@ -309,8 +307,6 @@ const handleAvisoReposicion = () => {
   background-color: white;
   align-self: start;
 }
-
-/* FIXME - Arreglar formato */
 
 .imagen-container--videojuegos .imagen {
   object-fit: cover;

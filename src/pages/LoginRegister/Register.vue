@@ -229,8 +229,6 @@ const handleSubmit = async () => {
   margin-bottom: 12px;
 }
 
-/* FIXME - Arreglar formato */
-
 .auth-form-reg {
   display: flex;
   flex-direction: column;

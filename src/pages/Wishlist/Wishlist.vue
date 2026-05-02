@@ -144,8 +144,6 @@ const handleConfirmRemove = async () => {
   box-sizing: border-box;
 }
 
-/* FIXME - Arreglar formato */
-
 .wishlist-header {
   margin-bottom: 32px;
 }
@@ -311,6 +309,10 @@ const handleConfirmRemove = async () => {
 @media (max-width: 1150px) {
   .wishlist-container {
     padding-left: 40px;
+  }
+
+  .wishlist-header {
+    padding-top: 60px;
   }
 }
 

@@ -159,8 +159,6 @@ watch(() => route.query.query, (query) => {
   object-fit: contain;
 }
 
-/* FIXME - Arreglar formato */
-
 @media (max-width: 1024px) {
   .productos-grid {
     grid-template-columns: repeat(2, 1fr);

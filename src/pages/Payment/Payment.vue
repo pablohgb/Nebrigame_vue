@@ -46,40 +46,63 @@
             <div v-if="isAddingMethod" class="add-method-form">
               <h3>Nuevo método de pago</h3>
 
+              <!-- Selector de tipo de pago -->
               <div class="form-group-payment">
-                <label for="tipo">Tipo</label>
-                <select id="tipo" v-model="newMethod.tipo">
+                <label>Tipo</label>
+                <select v-model="newMethod.tipo">
                   <option value="tarjeta">Tarjeta de crédito / débito</option>
                   <option value="paypal">PayPal</option>
                   <option value="transferencia">Transferencia bancaria</option>
+                  <option value="bizum">Bizum</option>
                 </select>
               </div>
 
-              <div class="form-group-payment">
-                <label for="detalles">Detalles</label>
-                <input
-                  type="text"
-                  id="detalles"
-                  v-model="newMethod.detalles"
-                  placeholder="**** **** **** 1234"
-                />
-              </div>
+              <!-- TARJETA -->
+              <template v-if="newMethod.tipo === 'tarjeta'">
+                <div class="form-group-payment">
+                  <label>Número de tarjeta</label>
+                  <input v-model="newMethod.numeroTarjeta" type="text" placeholder="1234 5678 9012 3456" maxlength="19" />
+                </div>
+                <div class="form-row-payment">
+                  <div class="form-group-payment">
+                    <label>Fecha de caducidad</label>
+                    <input v-model="newMethod.caducidad" type="text" placeholder="MM/AA" maxlength="5" />
+                  </div>
+                  <div class="form-group-payment">
+                    <label>CVV</label>
+                    <input v-model="newMethod.cvv" type="password" placeholder="123" maxlength="3" />
+                  </div>
+                </div>
+              </template>
 
+              <!-- PAYPAL -->
+              <template v-else-if="newMethod.tipo === 'paypal'">
+                <div class="form-group-payment">
+                  <label>Email de PayPal</label>
+                  <input v-model="newMethod.paypalEmail" type="email" placeholder="tucorreo@ejemplo.com" />
+                </div>
+              </template>
+
+              <!-- TRANSFERENCIA -->
+              <template v-else-if="newMethod.tipo === 'transferencia'">
+                <div class="form-group-payment">
+                  <label>Número de cuenta (IBAN)</label>
+                  <input v-model="newMethod.iban" type="text" placeholder="ES00 0000 0000 0000 0000 0000" maxlength="29" />
+                </div>
+              </template>
+
+              <!-- Campos para BIZUM -->
+              <template v-else-if="newMethod.tipo === 'bizum'">
+                <div class="form-group-payment">
+                  <label>Número de teléfono</label>
+                  <input v-model="newMethod.bizumTelefono" type="tel" placeholder="600 000 000" maxlength="9" />
+                </div>
+              </template>
+
+              <!-- Botones -->
               <div class="add-method-actions">
-                <button
-                  type="button"
-                  class="btn-save-method"
-                  @click="handleAddMethod"
-                >
-                  Guardar
-                </button>
-                <button
-                  type="button"
-                  class="btn-cancel-method"
-                  @click="isAddingMethod = false"
-                >
-                  Cancelar
-                </button>
+                <button type="button" class="btn-save-method" @click="handleAddMethod">Guardar</button>
+                <button type="button" class="btn-cancel-method" @click="isAddingMethod = false">Cancelar</button>
               </div>
             </div>
 
@@ -195,7 +218,17 @@
   const selectedPaymentMethod = ref(null);
   const isAddingMethod = ref(false);
   const processingOrder = ref(false);
-  const newMethod = ref({ tipo: "tarjeta", detalles: "" });
+
+  const newMethod = ref({
+    tipo: 'tarjeta',
+    numeroTarjeta: '',
+    caducidad: '',
+    cvv: '',
+    paypalEmail: '',
+    paypalPassword: '',
+    iban: '',
+    bizumTelefono: ''
+  })
 
   watch(
     cart,
@@ -227,23 +260,44 @@
       .toFixed(2);
   };
 
-  const handleAddMethod = async () => {
-    if (!newMethod.value.tipo || !newMethod.value.detalles.trim()) return;
-    try {
-      const data = await addPaymentMethod(
-        userId.value,
-        newMethod.value.tipo,
-        newMethod.value.detalles.trim(),
-      );
-      newMethod.value = { tipo: "tarjeta", detalles: "" };
-      isAddingMethod.value = false;
-      refetchPayment();
-      if (data?.metodoPago) selectedPaymentMethod.value = data.metodoPago;
-      toast.success("Método de pago añadido");
-    } catch {
-      toast.error("Error al añadir método de pago");
+const handleAddMethod = async () => {
+  let detalles = ''
+
+  if (newMethod.value.tipo === 'tarjeta') {
+    if (!newMethod.value.numeroTarjeta || !newMethod.value.caducidad || !newMethod.value.cvv) return
+    const ultimosCuatro = newMethod.value.numeroTarjeta.slice(-4)
+    detalles = `**** **** **** ${ultimosCuatro} | Cad: ${newMethod.value.caducidad}`
+
+  } else if (newMethod.value.tipo === 'paypal') {
+    if (!newMethod.value.paypalEmail) return
+    detalles = newMethod.value.paypalEmail
+
+  } else if (newMethod.value.tipo === 'transferencia') {
+    if (!newMethod.value.iban) return
+    detalles = newMethod.value.iban.toUpperCase()
+
+  } else if (newMethod.value.tipo === 'bizum') {
+    if (!newMethod.value.bizumTelefono) return
+    detalles = newMethod.value.bizumTelefono
+  }
+
+  try {
+    const data = await addPaymentMethod(userId.value, newMethod.value.tipo, detalles)
+    newMethod.value = {
+      tipo: 'tarjeta',
+      numeroTarjeta: '', caducidad: '', cvv: '',
+      paypalEmail: '', paypalPassword: '',
+      iban: '',
+      bizumTelefono: ''
     }
-  };
+    isAddingMethod.value = false
+    refetchPayment()
+    if (data?.metodoPago) selectedPaymentMethod.value = data.metodoPago
+    toast.success('Método de pago añadido')
+  } catch {
+    toast.error('Error al añadir método de pago')
+  }
+}
 
   const handleDeleteMethod = async (metodoId) => {
     try {
@@ -427,11 +481,13 @@
     font-weight: 600;
     margin: 0;
   }
+
   .form-group-payment {
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
+
   .form-group-payment label {
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
@@ -456,6 +512,7 @@
   .form-group-payment input::placeholder {
     color: rgba(255, 255, 255, 0.5);
   }
+
   .form-group-payment select option {
     background: #3b4abf;
     color: white;
@@ -465,6 +522,12 @@
   .form-group-payment select:focus {
     border-color: rgba(255, 255, 255, 0.6);
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  }
+
+  .form-row-payment {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 
   .add-method-actions {
