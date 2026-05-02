@@ -229,12 +229,18 @@ const handleConfirmRemoveWishlist = async () => {
 }
 
 const handleAddToWishlist = async (productId) => {
+  // Verificamos primero que el usuario esté logueado 
+  if (!userStore.id) {
+    toast.error('¡Tu lista de deseos te está esperando, inicia sesión!')
+    return
+  }
+
   isUpdating.value = true
   try {
-    await addWishlist(userId.value, productId)
+    await addWishlist(userStore.id, productId)
     localIsInWishlist.value = true
     toast.success('Producto añadido a la wishlist')
-  } catch {
+  } catch (error) {
     toast.error('No se pudo añadir a la wishlist')
   } finally {
     isUpdating.value = false
@@ -242,10 +248,16 @@ const handleAddToWishlist = async (productId) => {
 }
 
 const handleAddToCart = async (productId, plataformaId = null) => {
+  // Verificamos primero que el usuario esté logueado 
+  if (!userStore.id) {
+    toast.error('¡Necesitas iniciar sesión para añadir al carrito, jugador!')
+    return
+  }
+
   if (isUpdating.value) return
   isUpdating.value = true
   try {
-    await addCart(userId.value, productId, 1, plataformaId)
+    await addCart(userStore.id, productId, 1, plataformaId)
     toast.success('Producto añadido al carrito')
   } catch (error) {
     toast.error(error.message || 'No se pudo añadir al carrito')
