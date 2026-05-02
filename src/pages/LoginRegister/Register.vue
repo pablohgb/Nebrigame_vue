@@ -143,6 +143,7 @@ const handleSubmit = async () => {
         data.usuario.email,
         null
       )
+      if (data.accessToken) userStore.setAccessToken(data.accessToken)
       toast.success('Cuenta creada correctamente, bienvenido ' + data.usuario.nombre)
       router.replace('/')
     } else {

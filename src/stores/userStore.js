@@ -7,7 +7,8 @@ export const useUserStore = defineStore('user', {
     apellido1: null,
     apellido2: null,
     email: null,
-    fecha_registro: null
+    fecha_registro: null,
+    accessToken: null
   }),
 
   actions: {
@@ -19,6 +20,9 @@ export const useUserStore = defineStore('user', {
       this.email = email
       this.fecha_registro = fecha_registro
     },
+    setAccessToken(token) {
+      this.accessToken = token
+    },
     logout() {
       this.id = null
       this.nombre = null
@@ -26,6 +30,7 @@ export const useUserStore = defineStore('user', {
       this.apellido2 = null
       this.email = null
       this.fecha_registro = null
+      this.accessToken = null
     }
   },
 

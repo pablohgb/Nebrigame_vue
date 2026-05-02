@@ -1,7 +1,6 @@
 import { ref, watch, onUnmounted } from 'vue'
 import { parseId } from '../utils/parseId'
-
-const apiUrl = import.meta.env.VITE_BACK_CONNECTION
+import { apiFetch } from './apiClient'
 
 const useOrders = (userId) => {
     const orders = ref([])
@@ -21,7 +20,7 @@ const useOrders = (userId) => {
         loading.value = true
 
         try {
-            const res = await fetch(`${apiUrl}/usuarios/${id}/historial-compras`, { signal: controller.signal })
+            const res = await apiFetch(`/usuarios/${id}/historial-compras`, { signal: controller.signal })
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
             const data = await res.json()
             orders.value = data.pedidos || []
@@ -42,9 +41,8 @@ const useOrders = (userId) => {
 
 const createOrder = async (userId, orderData) => {
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/carrito/comprar`, {
+        const res = await apiFetch(`/usuarios/${userId}/carrito/comprar`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderData)
         })
 

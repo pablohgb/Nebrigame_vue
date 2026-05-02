@@ -1,5 +1,6 @@
 import { ref, watch, onUnmounted } from 'vue'
 import { parseId } from '../utils/parseId'
+import { apiFetch } from './apiClient'
 
 const apiUrl = import.meta.env.VITE_BACK_CONNECTION
 
@@ -21,7 +22,7 @@ const useWishlist = (userId) => {
         loading.value = true
 
         try {
-            const res = await fetch(`${apiUrl}/usuarios/${id}/wishlist`, { signal: controller.signal })
+            const res = await apiFetch(`/usuarios/${id}/wishlist`, { signal: controller.signal })
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
             const data = await res.json()
 
@@ -78,7 +79,7 @@ const useIsInWishlist = (userId, productId) => {
         controller = new AbortController()
 
         try {
-            const res = await fetch(`${apiUrl}/usuarios/${uId}/wishlist`, { signal: controller.signal })
+            const res = await apiFetch(`/usuarios/${uId}/wishlist`, { signal: controller.signal })
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
             const data = await res.json()
             const productIds = data.wishlist.map(item => Number(item.producto_id))
@@ -100,9 +101,8 @@ const useIsInWishlist = (userId, productId) => {
 
 const addWishlist = async (userId, productoId) => {
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/wishlist`, {
+        const res = await apiFetch(`/usuarios/${userId}/wishlist`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ producto_id: productoId })
         })
 
@@ -118,7 +118,7 @@ const addWishlist = async (userId, productoId) => {
 
 const deleteWishlist = async (userId, productoId) => {
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/wishlist/${productoId}`, {
+        const res = await apiFetch(`/usuarios/${userId}/wishlist/${productoId}`, {
             method: 'DELETE'
         })
 

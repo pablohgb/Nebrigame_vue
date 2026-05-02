@@ -1,6 +1,8 @@
-const login = async (email, contrasenna) => {
-    const apiUrl = import.meta.env.VITE_BACK_CONNECTION
+import { apiFetch } from './apiClient'
 
+const apiUrl = import.meta.env.VITE_BACK_CONNECTION
+
+const login = async (email, contrasenna) => {
     try {
         const res = await fetch(`${apiUrl}/usuarios/login`, {
             method: 'POST',
@@ -22,15 +24,10 @@ const login = async (email, contrasenna) => {
     }
 }
 
-//No nos hace falta logout, porque el token se guarda en el localStorage y se borra al cerrar sesión. --> Con Pinia. 
-
 const updateProfile = async (userId, { nombre, apellido1, apellido2, email, contrasenna, contrasennaActual }) => {
-    const apiUrl = import.meta.env.VITE_BACK_CONNECTION
-
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}`, {
+        const res = await apiFetch(`/usuarios/${userId}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, apellido1, apellido2, email, contrasenna, contrasennaActual })
         })
 
@@ -49,7 +46,6 @@ const updateProfile = async (userId, { nombre, apellido1, apellido2, email, cont
 }
 
 const deleteProfile = async (userId) => {
-    const apiUrl = import.meta.env.VITE_BACK_CONNECTION
     const id = Number(userId)
 
     if (isNaN(id) || id <= 0) {
@@ -57,7 +53,7 @@ const deleteProfile = async (userId) => {
     }
 
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${id}`, {
+        const res = await apiFetch(`/usuarios/${id}`, {
             method: 'DELETE'
         })
 

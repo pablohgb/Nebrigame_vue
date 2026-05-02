@@ -1,7 +1,6 @@
 import { ref, watch, onUnmounted } from 'vue'
 import { parseId } from '../utils/parseId'
-
-const apiUrl = import.meta.env.VITE_BACK_CONNECTION
+import { apiFetch } from './apiClient'
 
 const useAddresses = (userId) => {
     const addresses = ref([])
@@ -21,7 +20,7 @@ const useAddresses = (userId) => {
         loading.value = true
 
         try {
-            const res = await fetch(`${apiUrl}/usuarios/${id}/direcciones`, { signal: controller.signal })
+            const res = await apiFetch(`/usuarios/${id}/direcciones`, { signal: controller.signal })
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
             const data = await res.json()
             addresses.value = data.direcciones || []
@@ -44,9 +43,8 @@ const useAddresses = (userId) => {
 
 const addAddress = async (userId, data) => {
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/direcciones`, {
+        const res = await apiFetch(`/usuarios/${userId}/direcciones`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
 
@@ -62,9 +60,8 @@ const addAddress = async (userId, data) => {
 
 const deleteAddress = async (userId, direccionId) => {
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/direcciones/${direccionId}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+        const res = await apiFetch(`/usuarios/${userId}/direcciones/${direccionId}`, {
+            method: 'DELETE'
         })
 
         const data = await res.json()

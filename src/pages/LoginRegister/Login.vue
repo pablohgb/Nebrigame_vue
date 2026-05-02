@@ -105,6 +105,7 @@
         data.usuarioData.email,
         data.usuarioData.fecha_registro,
       );
+      if (data.accessToken) userStore.setAccessToken(data.accessToken);
       toast.success(
         "Sesión iniciada, bienvenido de nuevo " + data.usuarioData.nombre,
       );

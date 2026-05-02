@@ -1,7 +1,6 @@
 import { ref, watch, onUnmounted } from 'vue'
 import { parseId } from '../utils/parseId'
-
-const apiUrl = import.meta.env.VITE_BACK_CONNECTION
+import { apiFetch } from './apiClient'
 
 const usePayment = (userId) => {
     const payment = ref([])
@@ -21,7 +20,7 @@ const usePayment = (userId) => {
         loading.value = true
 
         try {
-            const res = await fetch(`${apiUrl}/usuarios/${id}/metodos-pago`, { signal: controller.signal })
+            const res = await apiFetch(`/usuarios/${id}/metodos-pago`, { signal: controller.signal })
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
             const data = await res.json()
             payment.value = data.metodosPago || []
@@ -44,9 +43,8 @@ const usePayment = (userId) => {
 
 const addPaymentMethod = async (userId, tipo, detalles) => {
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/metodos-pago`, {
+        const res = await apiFetch(`/usuarios/${userId}/metodos-pago`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ tipo, detalles })
         })
 
@@ -62,9 +60,8 @@ const addPaymentMethod = async (userId, tipo, detalles) => {
 
 const deletePaymentMethod = async (userId, metodoId) => {
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/metodos-pago/${metodoId}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+        const res = await apiFetch(`/usuarios/${userId}/metodos-pago/${metodoId}`, {
+            method: 'DELETE'
         })
 
         const data = await res.json()

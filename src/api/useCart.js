@@ -1,7 +1,6 @@
 import { ref, watch, onUnmounted } from 'vue'
 import { parseId } from '../utils/parseId'
-
-const apiUrl = import.meta.env.VITE_BACK_CONNECTION
+import { apiFetch } from './apiClient'
 
 const useCart = (userId) => {
     const cart = ref([])
@@ -21,7 +20,7 @@ const useCart = (userId) => {
         loading.value = true
 
         try {
-            const res = await fetch(`${apiUrl}/usuarios/${id}/carrito`, { signal: controller.signal })
+            const res = await apiFetch(`/usuarios/${id}/carrito`, { signal: controller.signal })
             if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
             const data = await res.json()
             cart.value = data.carrito || []
@@ -48,9 +47,8 @@ const addCart = async (userId, productoId, cantidad, plataformaId = null) => {
     }
 
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/carrito`, {
+        const res = await apiFetch(`/usuarios/${userId}/carrito`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         })
 
@@ -77,9 +75,8 @@ const changeQuantity = async (userId, productoId, cantidad, plataformaId = 0) =>
     if (plataformaId != null) body.plataforma_id = plataformaId
 
     try {
-        const res = await fetch(`${apiUrl}/usuarios/${userId}/carrito/${productoId}`, {
+        const res = await apiFetch(`/usuarios/${userId}/carrito/${productoId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         })
 
@@ -101,14 +98,14 @@ const changeQuantity = async (userId, productoId, cantidad, plataformaId = 0) =>
 }
 
 const deleteCart = async (userId, productoId, plataformaId = 0) => {
-    const url = new URL(`${apiUrl}/usuarios/${userId}/carrito/${productoId}`)
-
-    if (plataformaId != null) url.searchParams.set('plataforma_id', plataformaId)
+    const qs = new URLSearchParams()
+    if (plataformaId != null) qs.set('plataforma_id', String(plataformaId))
+    const q = qs.toString()
+    const path = `/usuarios/${userId}/carrito/${productoId}${q ? `?${q}` : ''}`
 
     try {
-        const res = await fetch(url.toString(), {
+        const res = await apiFetch(path, {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ plataforma_id: plataformaId })
         })
 
@@ -125,7 +122,7 @@ const deleteCart = async (userId, productoId, plataformaId = 0) => {
 }
 
 const validateCartStock = async (userId) => {
-    const res = await fetch(`${apiUrl}/usuarios/${userId}/carrito/validar-stock`)
+    const res = await apiFetch(`/usuarios/${userId}/carrito/validar-stock`)
     const data = await res.json()
 
     if (!res.ok) throw new Error(data.error || 'Error al validar stock')
