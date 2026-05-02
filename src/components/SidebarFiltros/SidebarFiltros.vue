@@ -1,96 +1,94 @@
 <template>
   <aside class="sidebar">
 
-    <!-- PRECIO -->
-    <div class="grupo">
-      <h3 class="grupo-titulo">Precio</h3>
-      <div class="rango-labels">
-        <span>{{ filtros.precioMin }}€</span>
-        <span>{{ filtros.precioMax }}€</span>
-      </div>
-      <input type="range" :min="limites.min" :max="limites.max" :value="filtros.precioMin"
-        @input="emitir('precioMin', +$event.target.value)" class="slider" />
-      <input type="range" :min="limites.min" :max="limites.max" :value="filtros.precioMax"
-        @input="emitir('precioMax', +$event.target.value)" class="slider" />
+    <div v-if="buscando" class="grupo">
+      <p class="resultados-texto">
+        {{ resultadosCount }} resultado{{ resultadosCount !== 1 ? 's' : '' }} para "{{ busqueda }}"
+      </p>
     </div>
 
-    <!-- VIDEOJUEGOS: género + plataforma -->
-    <template v-if="tipo === 'videojuegos'">
-      <div class="grupo">
-        <h3 class="grupo-titulo">Género</h3>
-        <label v-for="opcion in opciones.generos" :key="opcion" class="check-label">
-          <input type="checkbox" :value="opcion" :checked="filtros.generos.includes(opcion)"
-            @change="toggleCheck('generos', opcion)" />
-          {{ opcion }}
-        </label>
-      </div>
-      <div class="grupo">
-        <h3 class="grupo-titulo">Plataforma</h3>
-        <label v-for="opcion in opciones.plataformas" :key="opcion" class="check-label">
-          <input type="checkbox" :value="opcion" :checked="filtros.plataformas.includes(opcion)"
-            @change="toggleCheck('plataformas', opcion)" />
-          {{ opcion }}
-        </label>
-      </div>
-    </template>
-
-    <!-- CONSOLAS: fabricante -->
-    <template v-if="tipo === 'consolas'">
-      <div class="grupo">
-        <h3 class="grupo-titulo">Fabricante</h3>
-        <label v-for="opcion in opciones.fabricantes" :key="opcion" class="check-label">
-          <input type="checkbox" :value="opcion" :checked="filtros.fabricantes.includes(opcion)"
-            @change="toggleCheck('fabricantes', opcion)" />
-          {{ opcion }}
-        </label>
-      </div>
-    </template>
-
-    <!-- MERCHANDISING: categoría -->
-    <template v-if="tipo === 'merchandising'">
-      <div class="grupo">
-        <h3 class="grupo-titulo">Categoría</h3>
-        <label v-for="opcion in opciones.categorias" :key="opcion" class="check-label">
-          <input type="checkbox" :value="opcion" :checked="filtros.categorias.includes(opcion)"
-            @change="toggleCheck('categorias', opcion)" />
-          {{ opcion }}
-        </label>
-      </div>
-    </template>
-
-    <!-- LIMPIAR -->
+    <div class="grupo">
+      <h3 class="grupo-titulo">Ordenar</h3>
+      <select
+        aria-label="Ordenar resultados"
+        :value="ordenar"
+        @change="$emit('update:ordenar', $event.target.value)"
+        class="filtro-select"
+      >
+        <option value="defecto" disabled hidden>Selecciona...</option>
+        <option value="precio-asc">Precio: Menor a Mayor</option>
+        <option value="precio-desc">Precio: Mayor a Menor</option>
+        <option value="nombre-asc">Nombre: A-Z</option>
+        <option value="nombre-desc">Nombre: Z-A</option>
+      </select>
+    </div>
     <button v-if="hayFiltrosActivos" class="btn-limpiar" @click="$emit('limpiar')">
       ✕ Limpiar filtros
     </button>
+    <template v-if="!buscando">
 
+      <div class="grupo">
+        <h3 class="grupo-titulo">Precio</h3>
+        <div class="rango-labels">
+          <span>{{ filtros.precioMin }}€</span>
+          <span>{{ filtros.precioMax }}€</span>
+        </div>
+        <input type="range" :min="limites.min" :max="limites.max" :value="filtros.precioMin"
+          @input="emitir('precioMin', +$event.target.value)" class="slider" />
+        <input type="range" :min="limites.min" :max="limites.max" :value="filtros.precioMax"
+          @input="emitir('precioMax', +$event.target.value)" class="slider" />
+      </div>
+
+      <template v-if="tipo === 'videojuegos'">
+        <GrupoFiltro titulo="Género" :opciones="opciones.generos" :seleccionados="filtros.generos"
+          @toggle="toggleCheck('generos', $event)" />
+        <GrupoFiltro titulo="Plataforma" :opciones="opciones.plataformas" :seleccionados="filtros.plataformas"
+          @toggle="toggleCheck('plataformas', $event)" />
+      </template>
+
+      <template v-if="tipo === 'consolas'">
+        <GrupoFiltro titulo="Fabricante" :opciones="opciones.fabricantes" :seleccionados="filtros.fabricantes"
+          @toggle="toggleCheck('fabricantes', $event)" />
+      </template>
+
+      <template v-if="tipo === 'merchandising'">
+        <GrupoFiltro titulo="Categoría" :opciones="opciones.categorias" :seleccionados="filtros.categorias"
+          @toggle="toggleCheck('categorias', $event)" />
+      </template>
+
+    </template>
   </aside>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import GrupoFiltro from './GrupoFiltro.vue'
 
 const props = defineProps({
-  tipo:    String,
-  opciones: Object,   // { generos, plataformas, fabricantes, categorias }
-  limites:  Object,   // { min, max } — rango de precios real de los productos
-  filtros:  Object    // { generos, plataformas, fabricantes, categorias, precioMin, precioMax }
+  tipo:            String,
+  opciones:        Object,
+  limites:         Object,
+  filtros:         Object,
+  ordenar:         String,
+  buscando:        Boolean,
+  busqueda:        String,
+  resultadosCount: Number
 })
 
-const emit = defineEmits(['update:filtros', 'limpiar'])
+const emit = defineEmits(['update:filtros', 'update:ordenar', 'limpiar'])
 
 const hayFiltrosActivos = computed(() => {
   const f = props.filtros
   return f.generos.length > 0 || f.plataformas.length > 0 ||
          f.fabricantes.length > 0 || f.categorias.length > 0 ||
-         f.precioMin > props.limites.min || f.precioMax < props.limites.max
+         f.precioMin > props.limites.min || f.precioMax < props.limites.max ||
+         props.ordenar !== 'defecto'
 })
 
-// Emite el objeto filtros completo con un campo actualizado
 const emitir = (campo, valor) => {
   emit('update:filtros', { ...props.filtros, [campo]: valor })
 }
 
-// Añade o quita un valor de un array dentro de filtros
 const toggleCheck = (campo, valor) => {
   const actuales = [...props.filtros[campo]]
   const indice = actuales.indexOf(valor)
@@ -106,8 +104,13 @@ const toggleCheck = (campo, valor) => {
   min-width: 220px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 24px 0 24px 24px;
+  gap: 16px;
+  padding: 20px;
+  margin: 24px 0 24px 24px;
+  background: rgba(116, 57, 179, 0.06);
+  border: 1px solid rgba(116, 57, 179, 0.15);
+  border-radius: 12px;
+  align-self: flex-start;
 }
 
 .grupo {
@@ -124,23 +127,13 @@ const toggleCheck = (campo, valor) => {
   color: #7439b3;
   margin: 0;
   padding-bottom: 6px;
-  border-bottom: 2px solid #f0e6ff;
+  border-bottom: 2px solid rgba(116, 57, 179, 0.2);
 }
 
-.check-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.resultados-texto {
   font-size: 14px;
   color: black;
-  cursor: pointer;
-}
-
-.check-label input[type="checkbox"] {
-  accent-color: #7439b3;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
+  margin: 0;
 }
 
 .rango-labels {
@@ -154,6 +147,29 @@ const toggleCheck = (campo, valor) => {
   width: 100%;
   accent-color: #7439b3;
   cursor: pointer;
+}
+
+.filtro-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid #7439b3;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  color: black;
+  cursor: pointer;
+  outline: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.filtro-select:focus {
+  border-color: #65319c;
+  box-shadow: 0 0 0 3px rgba(116, 57, 179, 0.4);
+}
+
+.filtro-select option {
+  background: white;
+  color: black;
 }
 
 .btn-limpiar {
@@ -174,9 +190,9 @@ const toggleCheck = (campo, valor) => {
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 100%;
+    width: auto;
     min-width: unset;
-    padding: 0 24px;
+    margin: 16px 24px 0;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 16px;
