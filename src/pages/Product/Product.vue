@@ -149,39 +149,51 @@ onBeforeUnmount(() => {
 
 
 <style scoped>
-.productos-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  padding: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
+  .productos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
 
-.no-encontrado-pantalla {
-  height: calc(84vh - 88px);
+  .no-encontrado-pantalla {
+    flex: 1;                 
+    height: auto; 
+    height: calc(84vh - 88px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+  }
+
+  .no-encontrado-imagen {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: contain;
+  }
+
+.page-wrapper {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
+  flex-direction: column;
 }
 
-.no-encontrado-imagen {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  object-fit: contain;
+.page-wrapper section {
+  flex: 1;
 }
 
-@media (max-width: 1024px) {
-  .productos-grid {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 1024px) {
+    .productos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
-}
 
-@media (max-width: 640px) {
-  .productos-grid {
-    grid-template-columns: 1fr;
+  @media (max-width: 640px) {
+    .productos-grid {
+      grid-template-columns: 1fr;
+    }
   }
-}
 </style>
