@@ -29,7 +29,7 @@ busqueda en este componente.
 
 <script setup>
 
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onBeforeUnmount, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useVideojuegos, useConsolas, useMerchandising } from '../../api/useProduct'
 import Header from '../../components/Header/Header.vue'
@@ -39,9 +39,11 @@ import SearchFilter from '../../components/SearchFilter/SearchFilter.vue'
 import Loading from '../../components/Loading/Loading.vue'
 import getImageUrl from '../../utils/getImage'
 import { getNavigationHistoryState } from '../../utils/navigationState'
+import { useScrollStore } from '../../stores/scroll'
 
 const route = useRoute()
 const router = useRouter()
+const scrollStore = useScrollStore()
 
 const tipo = computed(() => route.params.tipo)
 const busqueda = ref('')
@@ -130,6 +132,18 @@ watch(() => route.query.query, (query) => {
     busqueda.value = ''
   }
 }, { immediate: true })
+
+watch(isLoading, async (cargando) => {
+  if (!cargando) {
+    await nextTick()
+    window.scrollTo(0, scrollStore.posicion)
+  }
+})
+
+onBeforeUnmount(() => {
+  console.log('💾 Guardando scroll:', window.scrollY)
+  scrollStore.posicion = window.scrollY
+})
 
 </script>
 

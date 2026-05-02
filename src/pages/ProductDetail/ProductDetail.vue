@@ -258,6 +258,10 @@ const handleAvisoReposicion = () => {
   toast.success('Te avisaremos cuando repongamos, muchas gracias')
 }
 
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
+
 </script>
 
 

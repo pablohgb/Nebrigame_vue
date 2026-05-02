@@ -17,6 +17,14 @@ import Payment from '../pages/Payment/Payment.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
+    scrollBehavior(savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0 }
+  },
+
   routes: [
     { path: '/', component: Home },
     // { path: '/', name: 'Home', component: Home },
