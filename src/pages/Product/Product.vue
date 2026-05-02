@@ -141,7 +141,6 @@ watch(isLoading, async (cargando) => {
 })
 
 onBeforeUnmount(() => {
-  console.log('💾 Guardando scroll:', window.scrollY)
   scrollStore.posicion = window.scrollY
 })
 
