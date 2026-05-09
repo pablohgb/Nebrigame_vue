@@ -4,10 +4,6 @@
 
     <Loading v-if="isLoading" />
 
-    <div v-else-if="productos.length === 0 && buscando" class="no-encontrado-pantalla">
-      <img src="../../assets/images/ups.jpg" alt="No se encontraron productos" class="no-encontrado-imagen" />
-    </div>
-
     <div v-else class="catalogo-layout">
       <SidebarFiltros
         v-if="tipo || buscando"
@@ -23,7 +19,10 @@
         @limpiar="limpiarFiltros"
       />
       <section class="productos-seccion">
-        <div class="productos-grid">
+        <div v-if="productos.length === 0" class="no-encontrado-pantalla">
+          <img src="../../assets/images/ups.jpg" alt="No se encontraron productos" class="no-encontrado-imagen" />
+        </div>
+        <div v-else class="productos-grid">
           <ProductCard v-for="producto in productos" :key="producto.id" :id="producto.id"
             :imagen="getImageUrl(producto.imagen_url)" :nombre="producto.nombre" :precio="producto.precio"
             :tipo="buscando ? getTipoProducto(producto) : tipo" />
@@ -223,6 +222,7 @@ onBeforeUnmount(() => {
 
 .productos-seccion {
   flex: 1;
+
 }
 
 .productos-grid {
@@ -233,19 +233,17 @@ onBeforeUnmount(() => {
 }
 
 .no-encontrado-pantalla {
-  flex: 1;
-  height: calc(84vh - 88px);
+  width: 100%;
+  padding: 24px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 24px;
 }
 
 .no-encontrado-imagen {
-  width: 100%;
-  max-width: 600px;
+  width: 40%;
   height: auto;
   object-fit: contain;
+  display: block;
 }
 
 .page-wrapper {

@@ -22,21 +22,23 @@
         <option value="nombre-desc">Nombre: Z-A</option>
       </select>
     </div>
+
     <button v-if="hayFiltrosActivos" class="btn-limpiar" @click="$emit('limpiar')">
       ✕ Limpiar filtros
     </button>
+
     <template v-if="!buscando">
 
       <div class="grupo">
         <h3 class="grupo-titulo">Precio</h3>
-        <div class="rango-labels">
-          <span>{{ filtros.precioMin }}€</span>
-          <span>{{ filtros.precioMax }}€</span>
-        </div>
-        <input type="range" :min="limites.min" :max="limites.max" :value="filtros.precioMin"
-          @input="emitir('precioMin', +$event.target.value)" class="slider" />
-        <input type="range" :min="limites.min" :max="limites.max" :value="filtros.precioMax"
-          @input="emitir('precioMax', +$event.target.value)" class="slider" />
+        <RangoDoble
+          :min="limites.min"
+          :max="limites.max"
+          :modelMin="filtros.precioMin"
+          :modelMax="filtros.precioMax"
+          @update:modelMin="emitir('precioMin', $event)"
+          @update:modelMax="emitir('precioMax', $event)"
+        />
       </div>
 
       <template v-if="tipo === 'videojuegos'">
@@ -57,12 +59,14 @@
       </template>
 
     </template>
+
   </aside>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import GrupoFiltro from './GrupoFiltro.vue'
+import RangoDoble from './RangoDoble.vue'
 
 const props = defineProps({
   tipo:            String,
@@ -134,19 +138,6 @@ const toggleCheck = (campo, valor) => {
   font-size: 14px;
   color: black;
   margin: 0;
-}
-
-.rango-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #555;
-}
-
-.slider {
-  width: 100%;
-  accent-color: #7439b3;
-  cursor: pointer;
 }
 
 .filtro-select {
