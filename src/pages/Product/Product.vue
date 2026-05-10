@@ -228,7 +228,6 @@
 
   .productos-seccion {
     flex: 1;
-
   }
 
   .productos-grid {
