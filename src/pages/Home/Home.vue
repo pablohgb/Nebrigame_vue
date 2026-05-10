@@ -87,6 +87,7 @@
   .home-container {
     flex: 1;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgba(218, 218, 211, 0.627);
   }
 
   .section-name {

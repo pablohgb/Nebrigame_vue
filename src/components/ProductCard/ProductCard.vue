@@ -51,7 +51,7 @@
     overflow: hidden;
     transition: transform 0.2s;
     background: #8153b3;
-    box-shadow: 2px 2px 4px rgb(171, 249, 244), 6px 6px 8px rgb(125, 189, 235), 10px 10px 8px rgb(178, 133, 230);
+    box-shadow: 2px 2px 4px rgb(68, 229, 218), 6px 6px 8px rgb(24, 100, 155), 10px 10px 8px rgb(140, 87, 201);
     text-decoration: none;
     display: block;
   }

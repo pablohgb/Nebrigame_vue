@@ -14,71 +14,77 @@
   </div>
 </template>
 
+
 <script setup>
-import { ref, computed } from 'vue'
 
-const props = defineProps({
-  titulo:        String,
-  opciones:      Array,
-  seleccionados: Array
-})
+  import { ref, computed } from 'vue'
 
-defineEmits(['toggle'])
+  const props = defineProps({
+    titulo:        String,
+    opciones:      Array,
+    seleccionados: Array
+  })
 
-const limite = 3
-const expandido = ref(false)
+  defineEmits(['toggle'])
 
-const visibles = computed(() =>
-  expandido.value ? props.opciones : props.opciones.slice(0, limite)
-)
+  const limite = 3
+  const expandido = ref(false)
+
+  const visibles = computed(() =>
+    expandido.value ? props.opciones : props.opciones.slice(0, limite)
+  )
+
 </script>
 
+
 <style scoped>
-.grupo {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
-.grupo-titulo {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #7439b3;
-  margin: 0;
-  padding-bottom: 6px;
-  border-bottom: 2px solid rgba(116, 57, 179, 0.2);
-}
+  .grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-.check-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: black;
-  cursor: pointer;
-}
+  .grupo-titulo {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5A2193;
+    margin: 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid rgba(116, 57, 179, 0.2);
+  }
 
-.check-label input[type="checkbox"] {
-  accent-color: #7439b3;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
+  .check-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: black;
+    cursor: pointer;
+  }
 
-.btn-ver-mas {
-  background: none;
-  border: none;
-  color: #7439b3;
-  font-size: 12px;
-  cursor: pointer;
-  padding: 2px 0;
-  text-align: left;
-  transition: color 0.2s;
-}
+  .check-label input[type="checkbox"] {
+    accent-color: #7439b3;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
 
-.btn-ver-mas:hover {
-  color: #65319c;
-}
+  .btn-ver-mas {
+    background: none;
+    border: none;
+    color: #7439b3;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 2px 0;
+    text-align: left;
+    transition: color 0.2s;
+  }
+
+  .btn-ver-mas:hover {
+    color: #65319c;
+  }
+
 </style>

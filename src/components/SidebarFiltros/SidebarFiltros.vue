@@ -1,6 +1,6 @@
 <template>
-  <aside class="sidebar">
 
+  <aside class="sidebar">
     <div v-if="buscando" class="grupo">
       <p class="resultados-texto">
         {{ resultadosCount }} resultado{{ resultadosCount !== 1 ? 's' : '' }} para "{{ busqueda }}"
@@ -59,138 +59,150 @@
       </template>
 
     </template>
-
   </aside>
+
 </template>
 
+
 <script setup>
-import { computed } from 'vue'
-import GrupoFiltro from './GrupoFiltro.vue'
-import RangoDoble from './RangoDoble.vue'
 
-const props = defineProps({
-  tipo:            String,
-  opciones:        Object,
-  limites:         Object,
-  filtros:         Object,
-  ordenar:         String,
-  buscando:        Boolean,
-  busqueda:        String,
-  resultadosCount: Number
-})
+  import { computed } from 'vue'
+  import GrupoFiltro from './GrupoFiltro.vue'
+  import RangoDoble from './RangoDoble.vue'
 
-const emit = defineEmits(['update:filtros', 'update:ordenar', 'limpiar'])
+  const props = defineProps({
+    tipo:            String,
+    opciones:        Object,
+    limites:         Object,
+    filtros:         Object,
+    ordenar:         String,
+    buscando:        Boolean,
+    busqueda:        String,
+    resultadosCount: Number
+  })
 
-const hayFiltrosActivos = computed(() => {
-  const f = props.filtros
-  return f.generos.length > 0 || f.plataformas.length > 0 ||
-         f.fabricantes.length > 0 || f.categorias.length > 0 ||
-         f.precioMin > props.limites.min || f.precioMax < props.limites.max ||
-         props.ordenar !== 'defecto'
-})
+  const emit = defineEmits(['update:filtros', 'update:ordenar', 'limpiar'])
 
-const emitir = (campo, valor) => {
-  emit('update:filtros', { ...props.filtros, [campo]: valor })
-}
+  const hayFiltrosActivos = computed(() => {
+    const f = props.filtros
+    return f.generos.length > 0 || f.plataformas.length > 0 ||
+          f.fabricantes.length > 0 || f.categorias.length > 0 ||
+          f.precioMin > props.limites.min || f.precioMax < props.limites.max ||
+          props.ordenar !== 'defecto'
+  })
 
-const toggleCheck = (campo, valor) => {
-  const actuales = [...props.filtros[campo]]
-  const indice = actuales.indexOf(valor)
-  if (indice === -1) actuales.push(valor)
-  else actuales.splice(indice, 1)
-  emitir(campo, actuales)
-}
+  const emitir = (campo, valor) => {
+    emit('update:filtros', { ...props.filtros, [campo]: valor })
+  }
+
+  const toggleCheck = (campo, valor) => {
+    const actuales = [...props.filtros[campo]]
+    const indice = actuales.indexOf(valor)
+    if (indice === -1) actuales.push(valor)
+    else actuales.splice(indice, 1)
+    emitir(campo, actuales)
+  }
+
 </script>
 
+
 <style scoped>
-.sidebar {
-  width: 220px;
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 20px;
-  margin: 24px 0 24px 24px;
-  background: rgba(116, 57, 179, 0.06);
-  border: 1px solid rgba(116, 57, 179, 0.15);
-  border-radius: 12px;
-  align-self: flex-start;
-}
 
-.grupo {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.grupo-titulo {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #7439b3;
-  margin: 0;
-  padding-bottom: 6px;
-  border-bottom: 2px solid rgba(116, 57, 179, 0.2);
-}
-
-.resultados-texto {
-  font-size: 14px;
-  color: black;
-  margin: 0;
-}
-
-.filtro-select {
-  width: 100%;
-  padding: 8px 12px;
-  border: 2px solid #7439b3;
-  border-radius: 8px;
-  font-size: 14px;
-  background: white;
-  color: black;
-  cursor: pointer;
-  outline: none;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-
-.filtro-select:focus {
-  border-color: #65319c;
-  box-shadow: 0 0 0 3px rgba(116, 57, 179, 0.4);
-}
-
-.filtro-select option {
-  background: white;
-  color: black;
-}
-
-.btn-limpiar {
-  padding: 8px 16px;
-  background: white;
-  color: #7439b3;
-  border: 2px solid #7439b3;
-  border-radius: 8px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-limpiar:hover {
-  background: #7439b3;
-  color: white;
-}
-
-@media (max-width: 768px) {
   .sidebar {
-    width: auto;
-    min-width: unset;
-    margin: 16px 24px 0;
-    flex-direction: row;
-    flex-wrap: wrap;
+    width: 220px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
+    padding: 20px;
+    margin: 24px 0 24px 24px;
+    border: 2px solid rgba(116, 57, 179, 0.449);
+    border-radius: 12px;
+    align-self: flex-start;
+    background-color: rgba(141, 124, 173, 0.966);
   }
 
   .grupo {
-    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
-}
+
+  .grupo-titulo {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #5A2193;
+    margin: 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid rgba(116, 57, 179, 0.2);
+  }
+
+  .resultados-texto {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: black;
+    margin: 0;
+  }
+
+  .filtro-select {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #5A2193;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    color: black;
+    cursor: pointer;
+    outline: none;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .filtro-select:focus {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-color: #65319c;
+    box-shadow: 0 0 0 3px rgba(116, 57, 179, 0.4);
+  }
+
+  .filtro-select option {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: white;
+    color: black;
+  }
+
+  .btn-limpiar {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 8px 16px;
+    background: white;
+    color: #000000;
+    border: 2px solid #5A2193;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-limpiar:hover {
+    background: #7439b3;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      width: auto;
+      min-width: unset;
+      margin: 16px 24px 0;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .grupo {
+      min-width: 140px;
+    }
+  }
+
 </style>

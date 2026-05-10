@@ -349,10 +349,9 @@
 <style scoped>
 
   .background-profile {
-    background-image: url('../../assets/images/perfilBackground.jpeg');
+    background-image: url('../../assets/images/backgroundProfile.jpg');
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-position: center 0%;
     min-height: 100vh;
   }
 
