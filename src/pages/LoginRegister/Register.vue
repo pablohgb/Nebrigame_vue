@@ -105,6 +105,19 @@ const formData = reactive({
   contrasennaConfirmar: ''
 })
 
+const resetForm = () => {
+  Object.assign(formData, {
+    nombre: '',
+    apellido1: '',
+    apellido2: '',
+    email: '',
+    emailConfirmar: '',
+    contrasenna: '',
+    contrasennaConfirmar: ''
+  })
+  error.value = null
+}
+
 const handleSubmit = async () => {
   error.value = null
 
@@ -149,6 +162,7 @@ const handleSubmit = async () => {
     } else {
       error.value = data.message || 'Error al registrarse'
       toast.error(data.message || 'Error al registrarse')
+      resetForm()
     }
 
   } catch (err) {
