@@ -23,10 +23,24 @@
         <div v-if="productos.length === 0" class="no-encontrado-pantalla">
           <img src="../../assets/images/ups.png" alt="No se encontraron productos" class="no-encontrado-imagen" />
         </div>
-        <div v-else class="productos-grid">
-          <ProductCard v-for="producto in productos" :key="producto.id" :id="producto.id"
-            :imagen="getImageUrl(producto.imagen_url)" :nombre="producto.nombre" :precio="producto.precio"
-            :tipo="buscando ? getTipoProducto(producto) : tipo" />
+        <div v-else>
+          <div class="productos-grid">
+            <ProductCard
+              v-for="producto in productosPaginados"
+              :key="producto.id"
+              :id="producto.id"
+              :imagen="getImageUrl(producto.imagen_url)"
+              :nombre="producto.nombre"
+              :precio="producto.precio"
+              :tipo="buscando ? getTipoProducto(producto) : tipo"
+            />
+          </div>
+
+          <div class="cargar-mas-wrapper" v-if="visibles < productos.length">
+            <button class="cargar-mas-btn" @click="cargarMas">
+              Cargar más ({{ productos.length - visibles }} restantes)
+            </button>
+          </div>
         </div>
       </section>
     </div>
@@ -63,6 +77,20 @@
   const filtros = ref({
     generos: [], plataformas: [], fabricantes: [], categorias: [],
     precioMin: 0, precioMax: 9999
+  })
+  const PRODUCTOS_POR_PAGINA = 15
+  const visibles = ref(PRODUCTOS_POR_PAGINA)
+
+  const productosPaginados = computed(() => {
+    return productos.value.slice(0, visibles.value)
+  })
+
+  const cargarMas = () => {
+    visibles.value += PRODUCTOS_POR_PAGINA
+  }
+
+  watch([filtros, ordenar, tipo, buscando], () => {
+    visibles.value = PRODUCTOS_POR_PAGINA
   })
 
   const { videojuegos, loading: loadingVideojuegos } = useVideojuegos()
@@ -235,6 +263,28 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     padding: 24px;
+  }
+
+  .cargar-mas-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 16px 24px 32px;
+  }
+
+  .cargar-mas-btn {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .cargar-mas-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.7);
   }
 
   .no-encontrado-pantalla {
