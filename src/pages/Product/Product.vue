@@ -21,7 +21,7 @@
       />
       <section class="productos-seccion">
         <div v-if="productos.length === 0" class="no-encontrado-pantalla">
-          <img src="../../assets/images/ups3.png" alt="No se encontraron productos" class="no-encontrado-imagen" />
+          <img src="../../assets/images/ups.png" alt="No se encontraron productos" class="no-encontrado-imagen" />
         </div>
         <div v-else class="productos-grid">
           <ProductCard v-for="producto in productos" :key="producto.id" :id="producto.id"
