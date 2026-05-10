@@ -20,7 +20,7 @@
   }
 
   .loading-pantalla p {
-    color: black;
+    color: white;
     font-size: 32px;
     font-weight: bold;
     margin: 0;
@@ -29,8 +29,8 @@
   .loading-animacion {
     width: 60px;
     height: 60px;
-    border: 6px solid rgba(127, 48, 188, 0.2);
-    border-top-color: #7F30BC;
+    border: 6px solid rgba(76, 113, 255, 0.2);
+    border-top-color: rgb(76, 113, 255);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
