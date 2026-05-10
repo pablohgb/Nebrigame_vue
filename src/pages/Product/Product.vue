@@ -246,10 +246,12 @@
   }
 
   .no-encontrado-imagen {
-    width: 40%;
-    height: auto;
-    object-fit: contain;
-    display: block;
+    margin-top: 20px;
+    width: 800px;
+    height: 800px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 2px 2px 4px rgb(68, 229, 218), 6px 6px 8px rgb(24, 100, 155), 10px 10px 8px rgb(140, 87, 201);
   }
 
   .page-wrapper {
