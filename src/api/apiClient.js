@@ -1,21 +1,38 @@
 import { useUserStore } from '../stores/userStore'
+import { toast } from '../stores/toastStore'
 
 const apiUrl = import.meta.env.VITE_BACK_CONNECTION
 
+let refreshPromise = null
+
 async function refreshAccessToken(store) {
     if (!store.refreshToken) return false
-    const res = await fetch(`${apiUrl}/usuarios/refresh`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken: store.refreshToken }),
-    })
-    const data = await res.json().catch(() => ({}))
-    if (!res.ok || !data.accessToken) {
-        store.logout()
-        return false
-    }
-    store.setAccessToken(data.accessToken)
-    return true
+    if (refreshPromise) return refreshPromise
+
+    refreshPromise = (async () => {
+        try {
+            const res = await fetch(`${apiUrl}/usuarios/refresh`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refreshToken: store.refreshToken }),
+            })
+            const data = await res.json().catch(() => ({}))
+            if (!res.ok || !data.accessToken) {
+                toast.error(
+                    'Tu sesión ha expirado. Vuelve a iniciar sesión.',
+                    5000
+                )
+                store.logout()
+                return false
+            }
+            store.setAccessToken(data.accessToken)
+            return true
+        } finally {
+            refreshPromise = null
+        }
+    })()
+
+    return refreshPromise
 }
 
 export async function apiFetch(path, options = {}) {

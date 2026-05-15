@@ -115,10 +115,12 @@
     flex-direction: column;
     gap: 16px;
     padding: 20px;
-    margin: 24px 0 24px 24px;
+    margin: 0;
     border: 2px solid rgba(116, 57, 179, 0.449);
     border-radius: 12px;
     align-self: flex-start;
+    position: sticky;
+    top: 24px;
     background-color: rgba(141, 124, 173, 0.966);
   }
 
