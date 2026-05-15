@@ -247,11 +247,14 @@
 <style scoped>
 
   .catalogo-layout {
-    display: flex;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 244px 1fr;
     max-width: 1400px;
     margin: 0 auto;
     flex: 1;
+    width: 100%;
+    gap: 24px;        /* 👈 añade esto */
+    padding: 24px;    /* 👈 añade esto */
   }
 
   .productos-seccion {
@@ -295,8 +298,8 @@
   }
 
   .no-encontrado-imagen {
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     object-fit: cover;
     border-radius: 20px;
   }
@@ -324,7 +327,7 @@
 
   @media (max-width: 768px) {
     .catalogo-layout {
-      flex-direction: column;
+      grid-template-columns: 1fr;
     }
   }
 
