@@ -68,4 +68,40 @@ const deleteProfile = async (userId) => {
     }
 }
 
-export { login, updateProfile, deleteProfile }
+const forgotPassword = async (email) => {
+    try {
+        const res = await fetch(`${apiUrl}/usuarios/forgot-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            throw new Error(data.error || 'Error al solicitar la recuperación')
+        }
+        return data
+    } catch (err) {
+        console.error('Error in forgotPassword:', err)
+        throw err
+    }
+}
+
+const resetPassword = async (token, contrasennaNueva) => {
+    try {
+        const res = await fetch(`${apiUrl}/usuarios/reset-password`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, contrasennaNueva })
+        })
+        const data = await res.json()
+        if (!res.ok) {
+            throw new Error(data.error || 'Error al restablecer la contraseña')
+        }
+        return data
+    } catch (err) {
+        console.error('Error in resetPassword:', err)
+        throw err
+    }
+}
+
+export { login, updateProfile, deleteProfile, forgotPassword, resetPassword }
