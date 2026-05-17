@@ -83,7 +83,6 @@
   <style scoped>
 
   .background-orders {
-    /* background-image: url('../../assets/images/perfilBackground.jpeg'); */
     background-image: url('../../assets/images/backgroundProfile.jpg');
     background-size: cover;
     background-position: center 0%;

@@ -164,13 +164,6 @@
                 </button>
                 <button
                   type="button"
-                  class="btn-continue-new-address"
-                  @click="handleSelectNewAddressAndContinue"
-                >
-                  Usar y continuar al pago
-                </button>
-                <button
-                  type="button"
                   class="btn-cancel-address"
                   @click="cancelarNuevaDireccion"
                 >
@@ -434,22 +427,6 @@
     }
   };
 
-  const handleSelectNewAddressAndContinue = async () => {
-    if (!validateAll()) return;
-    try {
-      const { valido, errores } = await validateCartStock(userId.value);
-      if (!valido && errores?.length > 0) {
-        toast.error(
-          `Stock insuficiente para ${errores[0].nombre}. Disponible: ${errores[0].stockDisponible}`,
-        );
-        return;
-      }
-      navigateToPayment({ ...newAddress.value });
-    } catch (error) {
-      toast.error(error.message || "Error al validar el carrito");
-    }
-  };
-
 </script>
 
 
@@ -616,18 +593,6 @@
 
   .btn-save-address:hover {
     background-color: #3da378;
-  }
-
-  .btn-continue-new-address {
-    background-color: #5b6ef5;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
   }
 
   .btn-continue-new-address:hover {

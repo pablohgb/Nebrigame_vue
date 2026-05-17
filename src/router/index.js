@@ -3,7 +3,7 @@ import Home from '../pages/Home/Home.vue'
 import Login from '../pages/LoginRegister/Login.vue'
 import Register from '../pages/LoginRegister/Register.vue'
 import ForgotPassword from '../pages/LoginRegister/Forgotpassword.vue'
-import ResetPassword from '../pages/LoginRegister/ResetPassword.vue'
+import ResetPassword from '../pages/LoginRegister/Resetpassword.vue'
 import NotFound from '../pages/NotFound/NotFound.vue'
 import Product from '../pages/Product/Product.vue'
 import ProductDetail from '../pages/ProductDetail/ProductDetail.vue'
@@ -33,8 +33,8 @@ const router = createRouter({
     // { path: '/', name: 'Home', component: Home },
     { path: '/login', component: Login}, 
     { path: '/registro', component: Register},
-    { path: '/recuperar-contraseña', component: ForgotPassword},
-    { path: '/restablecer-contraseña', component: ResetPassword },
+    { path: '/recuperar-password', component: ForgotPassword},
+    { path: '/restablecer-password', component: ResetPassword },
     { path: '/productos', component: Product }, 
     { path: '/productos/:tipo', component: Product },
     { path: '/producto/:tipo/:id', component: ProductDetail }, 

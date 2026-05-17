@@ -30,7 +30,7 @@
               />
             </div>
 
-            <a @click="router.push('/recuperar-contraseña')" 
+            <a @click="router.push('/recuperar-password')" 
               class="forgot-password-log" style="cursor: pointer;">
               ¿Olvidaste tu contraseña?
             </a>

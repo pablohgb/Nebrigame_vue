@@ -1257,10 +1257,10 @@ async function eliminar(id) {
 }
 
 .admin-panel {
-  background: rgba(44, 62, 80, 0.55);
+  background: rgba(91, 109, 245, 0.606);
   border-radius: 14px;
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(10, 32, 103, 0.771);
 }
 
 .admin-panel h2 {
