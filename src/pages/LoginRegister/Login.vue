@@ -30,11 +30,10 @@
               />
             </div>
 
-            <div class="form-footer-log">
-              <a href="#" class="forgot-password-log"
-                >¿Olvidaste tu contraseña?</a
-              >
-            </div>
+            <a @click="router.push('/recuperar-contraseña')" 
+              class="forgot-password-log" style="cursor: pointer;">
+              ¿Olvidaste tu contraseña?
+            </a>
 
             <div class="btn-cont-log">
               <button type="submit" class="btn-primary-log">
