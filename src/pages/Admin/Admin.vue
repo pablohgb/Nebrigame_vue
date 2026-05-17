@@ -1195,7 +1195,13 @@ async function eliminar(id) {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(160deg, #1a1528 0%, #2c2540 45%, #1f1a2e 100%);
+  background-image:
+      linear-gradient(rgba(34, 33, 33, 0.562), rgba(34, 33, 33, 0.562)),
+      url("../../assets/images/backgroundProductos.jpg");
+    background-repeat: repeat-x round;
+    background-size: 400px 400px;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .admin-main {
