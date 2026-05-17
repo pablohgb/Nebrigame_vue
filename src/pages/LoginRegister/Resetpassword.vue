@@ -88,8 +88,6 @@ import { resetPassword } from "../../api/useAuth";
 
 const router = useRouter();
 const route = useRoute();
-
-// Leer el token de la URL: /restablecer-password?token=xxxx
 const token = ref(route.query.token || "");
 const completado = ref(false);
 const loading = ref(false);
