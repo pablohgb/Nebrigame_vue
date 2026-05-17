@@ -103,11 +103,6 @@ const handleSubmit = async () => {
     return;
   }
 
-  if (formData.contrasennaNueva.length < 6) {
-    toast.error("La contraseña debe tener al menos 6 caracteres");
-    return;
-  }
-
   if (formData.contrasennaNueva !== formData.confirmacion) {
     toast.error("Las contraseñas no coinciden");
     return;
