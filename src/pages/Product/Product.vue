@@ -78,6 +78,7 @@
     generos: [], plataformas: [], fabricantes: [], categorias: [],
     precioMin: 0, precioMax: 9999
   })
+
   const PRODUCTOS_POR_PAGINA = 15
   const visibles = ref(PRODUCTOS_POR_PAGINA)
 
@@ -253,8 +254,9 @@
     margin: 0 auto;
     flex: 1;
     width: 100%;
-    gap: 24px;        /* 👈 añade esto */
-    padding: 24px;    /* 👈 añade esto */
+    gap: 40px;
+    padding: 24px;
+    box-sizing: border-box;
   }
 
   .productos-seccion {
@@ -265,13 +267,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    padding: 24px;
   }
 
   .cargar-mas-wrapper {
     display: flex;
     justify-content: center;
-    padding: 16px 24px 32px;
+    padding: 16px 0 32px;
   }
 
   .cargar-mas-btn {
@@ -295,11 +296,12 @@
     padding: 24px;
     display: flex;
     justify-content: center;
+    box-sizing: border-box;
   }
 
   .no-encontrado-imagen {
-    width: 500px;
-    height: 500px;
+    width: 300px;
+    height: 300px;
     object-fit: cover;
     border-radius: 20px;
   }
@@ -313,6 +315,7 @@
     background-repeat: repeat-x round;
     background-size: 400px 400px;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   .page-wrapper section {
@@ -328,6 +331,11 @@
   @media (max-width: 768px) {
     .catalogo-layout {
       grid-template-columns: 1fr;
+      padding: 16px;
+      gap: 16px;
+      box-sizing: border-box;
+      width: 100%;
+      overflow: hidden;
     }
   }
 
