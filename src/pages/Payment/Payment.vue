@@ -20,16 +20,16 @@
             </p>
 
             <div
+              @click="selectedPaymentMethod = method"
+              role="button"
+              tabindex="0"
+              @keydown.enter="selectedPaymentMethod = method"
               v-for="method in payment"
               :key="method.id"
               :class="`payment-method-item ${selectedPaymentMethod?.id === method.id ? 'selected' : ''}`"
             >
               <div
                 class="payment-method-info"
-                @click="selectedPaymentMethod = method"
-                role="button"
-                tabindex="0"
-                @keydown.enter="selectedPaymentMethod = method"
               >
                 <h3>{{ method.tipo }}</h3>
                 <p>{{ method.detalles }}</p>
@@ -398,6 +398,7 @@ const handleAddMethod = async () => {
     align-items: center;
     gap: 1rem;
     transition: background 0.2s ease;
+    cursor: pointer;
   }
 
   .payment-method-item:hover {
@@ -412,7 +413,6 @@ const handleAddMethod = async () => {
 
   .payment-method-info {
     flex: 1;
-    cursor: pointer;
   }
   .payment-method-info h3 {
     color: white;
