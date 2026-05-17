@@ -13,6 +13,10 @@ import Orders from '../pages/Orders/Orders.vue'
 import Cart from '../pages/Cart/Cart.vue'
 import Shipping from '../pages/Shipping/Shipping.vue'
 import Payment from '../pages/Payment/Payment.vue'
+import Admin from '../pages/Admin/Admin.vue'
+import { useUserStore } from '../stores/userStore'
+import { toast } from '../stores/toastStore'
+import { fetchIsAdmin } from '../api/useAdmin'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,8 +44,26 @@ const router = createRouter({
     { path: '/carrito', component: Cart }, 
     { path: '/envio', component: Shipping },
     { path: '/pago', component: Payment },
+    { path: '/admin', component: Admin },
     { path: '/:pathMatch(.*)*', component: NotFound }
   ]
+})
+
+router.beforeEach(async (to) => {
+  if (to.path !== '/admin') return true
+
+  const userStore = useUserStore()
+  if (!userStore.accessToken) {
+    return { path: '/login', query: { redirect: '/admin' }, replace: true }
+  }
+
+  const { isAdmin } = await fetchIsAdmin()
+  if (!isAdmin) {
+    toast.error('No tienes permisos de administración')
+    return { path: '/', replace: true }
+  }
+
+  return true
 })
 
 export default router
