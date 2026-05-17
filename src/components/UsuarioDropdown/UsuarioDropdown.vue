@@ -8,6 +8,7 @@
       <div v-if="isDropdownOpen" class="usuario-dropdown">
         <RouterLink to="/perfil" @click="isDropdownOpen = false">Mi cuenta</RouterLink>
         <RouterLink to="/pedidos" @click="isDropdownOpen = false">Mis pedidos</RouterLink>
+        <RouterLink v-if="isAdmin" to="/admin" @click="isDropdownOpen = false">Administración</RouterLink>
         <button @click="handleLogout">Cerrar sesión</button>
       </div>
     </template>
@@ -22,15 +23,30 @@
 
 <script setup>
 
-  import { ref, onMounted, onUnmounted } from 'vue'
+  import { ref, watch, onMounted, onUnmounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { User } from 'lucide-vue-next'
   import { useUserStore } from '../../stores/userStore'
   import { toast } from '../../stores/toastStore'
+  import { fetchIsAdmin } from '../../api/useAdmin'
 
   const userStore = useUserStore()
   const router = useRouter()
   const isDropdownOpen = ref(false)
+  const isAdmin = ref(false)
+
+  watch(
+    () => [userStore.accessToken, userStore.id],
+    async () => {
+      if (!userStore.accessToken || !userStore.id) {
+        isAdmin.value = false
+        return
+      }
+      const r = await fetchIsAdmin()
+      isAdmin.value = r.isAdmin
+    },
+    { immediate: true },
+  )
 
   const handleLogout = () => {
     const nombre = userStore.nombre

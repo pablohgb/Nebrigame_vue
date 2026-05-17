@@ -63,7 +63,7 @@
 <script setup>
 
   import { reactive, onMounted } from "vue";
-  import { useRouter } from "vue-router";
+  import { useRoute, useRouter } from "vue-router";
   import SimpleHeader from "../../components/SimpleHeader/SimpleHeader.vue";
   import Footer from "../../components/Footer/Footer.vue";
   import { useUserStore } from "../../stores/userStore";
@@ -72,7 +72,16 @@
   import { getNavigationHistoryState } from "../../utils/navigationState";
 
   const router = useRouter();
+  const route = useRoute();
   const userStore = useUserStore();
+
+  function resolvePostLoginPath() {
+    const raw = route.query.redirect;
+    if (typeof raw === "string" && raw.startsWith("/") && !raw.startsWith("//")) {
+      return raw;
+    }
+    return validFrom || "/";
+  }
 
   const fromRaw = getNavigationHistoryState().from;
   const from = typeof fromRaw === "string" ? fromRaw : undefined;
@@ -80,7 +89,7 @@
 
   onMounted(() => {
     if (userStore.id) {
-      router.replace(validFrom || "/");
+      router.replace(resolvePostLoginPath());
     }
   });
 
@@ -110,7 +119,7 @@
       toast.success(
         "Sesión iniciada, bienvenido de nuevo " + data.usuarioData.nombre,
       );
-      router.replace(validFrom || "/");
+      router.replace(resolvePostLoginPath());
     } catch (error) {
       toast.error(error.message);
       formData.email = "";
