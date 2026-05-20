@@ -78,7 +78,7 @@
 <style scoped>
 
   .simple-header-cart {
-    background-color: #4c70ff;
+    background-color: #4c71ff;
   }
 
   .navbar-cart {

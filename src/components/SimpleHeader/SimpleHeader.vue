@@ -59,7 +59,7 @@
 <style scoped>
 
   .simple-header {
-    background-color: #4c70ff;
+    background-color: #4c71ff;
     z-index: 100;
   }
 
