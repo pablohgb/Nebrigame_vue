@@ -128,10 +128,6 @@
           </button>
         </div>
         <div v-show="showFormJuego">
-          <p class="admin-hint">
-            Al editar un juego con varias plataformas, guardar unifica stock/plataforma en una sola fila (la del
-            formulario).
-          </p>
           <div class="admin-form-grid">
           <div class="admin-field">
             <label for="aj-nombre">Nombre</label>
@@ -149,16 +145,43 @@
             <label for="aj-edad">Edad mínima</label>
             <input id="aj-edad" v-model.number="formJuego.edad_minima" type="number" min="0" max="18" />
           </div>
-          <div class="admin-field">
-            <label for="aj-plat">Plataforma</label>
-            <select id="aj-plat" v-model.number="formJuego.plataforma_id">
-              <option disabled :value="0">Selecciona…</option>
-              <option v-for="p in plataformas" :key="p.id" :value="p.id">{{ p.nombre }}</option>
-            </select>
-          </div>
-          <div class="admin-field">
-            <label for="aj-stock">Stock</label>
-            <input id="aj-stock" v-model.number="formJuego.control_stock" type="number" min="0" />
+          <div class="admin-field admin-field-full">
+            <span class="admin-label-block">Plataformas y stock</span>
+            <div class="admin-plat-rows">
+              <div
+                v-for="(row, idx) in formJuego.plataformas"
+                :key="idx"
+                class="admin-plat-row"
+              >
+                <select v-model.number="row.plataforma_id" :aria-label="`Plataforma ${idx + 1}`">
+                  <option :value="0">Selecciona…</option>
+                  <option
+                    v-for="p in plataformasDisponiblesPorFila(formJuego.plataformas, idx)"
+                    :key="p.id"
+                    :value="p.id"
+                  >
+                    {{ p.nombre }}
+                  </option>
+                </select>
+                <input
+                  v-model.number="row.control_stock"
+                  type="number"
+                  min="0"
+                  :aria-label="`Stock plataforma ${idx + 1}`"
+                />
+                <button
+                  type="button"
+                  class="admin-btn-secondary admin-plat-remove"
+                  :disabled="formJuego.plataformas.length <= 1"
+                  @click="removeFormJuegoPlat(idx)"
+                >
+                  Quitar
+                </button>
+              </div>
+              <button type="button" class="admin-btn-secondary" @click="addFormJuegoPlat">
+                + Añadir plataforma
+              </button>
+            </div>
           </div>
           <div class="admin-field admin-field-full">
             <label for="aj-img">URL imagen (opcional)</label>
@@ -184,6 +207,9 @@
                 {{ item.nombre }}
               </strong>
               <span>{{ item.precio }} € · {{ item.juego?.genero || '—' }}</span>
+              <span v-if="resumenPlataformasJuego(item)" class="admin-plat-summary">{{
+                resumenPlataformasJuego(item)
+              }}</span>
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarJuego(item)">
@@ -361,15 +387,43 @@
             <label>Edad mínima</label>
             <input v-model.number="editJuego.edad_minima" type="number" min="0" max="18" />
           </div>
-          <div class="admin-field">
-            <label>Plataforma</label>
-            <select v-model.number="editJuego.plataforma_id">
-              <option v-for="p in plataformas" :key="p.id" :value="p.id">{{ p.nombre }}</option>
-            </select>
-          </div>
-          <div class="admin-field">
-            <label>Stock</label>
-            <input v-model.number="editJuego.control_stock" type="number" min="0" />
+          <div class="admin-field admin-field-full">
+            <span class="admin-label-block">Plataformas y stock</span>
+            <div class="admin-plat-rows">
+              <div
+                v-for="(row, idx) in editJuego.plataformas"
+                :key="'ej-' + idx"
+                class="admin-plat-row"
+              >
+                <select v-model.number="row.plataforma_id" :aria-label="`Editar plataforma ${idx + 1}`">
+                  <option :value="0">Selecciona…</option>
+                  <option
+                    v-for="p in plataformasDisponiblesPorFila(editJuego.plataformas, idx)"
+                    :key="p.id"
+                    :value="p.id"
+                  >
+                    {{ p.nombre }}
+                  </option>
+                </select>
+                <input
+                  v-model.number="row.control_stock"
+                  type="number"
+                  min="0"
+                  :aria-label="`Stock plataforma ${idx + 1}`"
+                />
+                <button
+                  type="button"
+                  class="admin-btn-secondary admin-plat-remove"
+                  :disabled="editJuego.plataformas.length <= 1"
+                  @click="removeEditJuegoPlat(idx)"
+                >
+                  Quitar
+                </button>
+              </div>
+              <button type="button" class="admin-btn-secondary" @click="addEditJuegoPlat">
+                + Añadir plataforma
+              </button>
+            </div>
           </div>
           <div class="admin-field admin-field-full">
             <label>URL imagen</label>
@@ -632,8 +686,7 @@ const formJuego = reactive({
   imagen_url: '',
   genero: '',
   edad_minima: 0,
-  plataforma_id: 0,
-  control_stock: 0,
+  plataformas: [{ plataforma_id: 0, control_stock: 0 }],
 })
 
 const formConsola = reactive({
@@ -669,8 +722,7 @@ const editJuego = reactive({
   imagen_url: '',
   genero: '',
   edad_minima: 0,
-  plataforma_id: 0,
-  control_stock: 0,
+  plataformas: [{ plataforma_id: 0, control_stock: 0 }],
 })
 
 const editConsola = reactive({
@@ -730,6 +782,63 @@ function pivotJuegoStock(plataforma) {
   if (!plataforma) return 0
   const jp = plataforma.JuegoPlataforma || plataforma.juegos_plataformas
   return jp != null ? Number(jp.control_stock) || 0 : 0
+}
+
+function resumenPlataformasJuego(item) {
+  const plats = item.juego?.plataformas || []
+  if (!plats.length) return ''
+  return plats.map((p) => p.nombre).join(' · ')
+}
+
+function addFormJuegoPlat() {
+  formJuego.plataformas.push({ plataforma_id: 0, control_stock: 0 })
+}
+
+function removeFormJuegoPlat(idx) {
+  if (formJuego.plataformas.length <= 1) return
+  formJuego.plataformas.splice(idx, 1)
+}
+
+function addEditJuegoPlat() {
+  editJuego.plataformas.push({
+    plataforma_id: plataformas.value[0]?.id ?? 0,
+    control_stock: 0,
+  })
+}
+
+function removeEditJuegoPlat(idx) {
+  if (editJuego.plataformas.length <= 1) return
+  editJuego.plataformas.splice(idx, 1)
+}
+
+function buildPlataformasPayload(rows) {
+  const plataformas = rows
+    .filter((r) => r.plataforma_id > 0)
+    .map((r) => ({
+      plataforma_id: r.plataforma_id,
+      control_stock: Math.max(0, Math.floor(Number(r.control_stock) || 0)),
+    }))
+  const ids = new Set(plataformas.map((r) => r.plataforma_id))
+  if (ids.size !== plataformas.length) {
+    return { error: 'No repitas la misma plataforma' }
+  }
+  if (plataformas.length === 0) {
+    return { error: 'Indica al menos una plataforma' }
+  }
+  return { plataformas }
+}
+
+function plataformasDisponiblesPorFila(rows, rowIndex) {
+  const list = plataformas.value
+  if (!list?.length) return []
+  const currentId = rows[rowIndex]?.plataforma_id
+  const usadasOtras = new Set()
+  rows.forEach((r, i) => {
+    if (i !== rowIndex && r.plataforma_id > 0) {
+      usadasOtras.add(r.plataforma_id)
+    }
+  })
+  return list.filter((p) => !usadasOtras.has(p.id) || p.id === currentId)
 }
 
 function formatEuro(val) {
@@ -836,9 +945,6 @@ cargarPlataformas()
 
 function abrirEditarJuego(item) {
   const plats = item.juego?.plataformas || []
-  const p0 = plats[0]
-  const stock = pivotJuegoStock(p0)
-
   editJuego.id = item.id
   editJuego.nombre = item.nombre
   editJuego.precio = Number(item.precio)
@@ -846,8 +952,13 @@ function abrirEditarJuego(item) {
   editJuego.imagen_url = item.imagen_url || ''
   editJuego.genero = item.juego?.genero || ''
   editJuego.edad_minima = item.juego?.edad_minima ?? 0
-  editJuego.plataforma_id = p0?.id ?? plataformas.value[0]?.id ?? 0
-  editJuego.control_stock = stock
+  editJuego.plataformas =
+    plats.length > 0
+      ? plats.map((plat) => ({
+          plataforma_id: plat.id,
+          control_stock: pivotJuegoStock(plat),
+        }))
+      : [{ plataforma_id: plataformas.value[0]?.id ?? 0, control_stock: 0 }]
   editJuegoOpen.value = true
 }
 
@@ -856,8 +967,9 @@ async function guardarEdicionJuego() {
     toast.error('Nombre y género obligatorios')
     return
   }
-  if (!editJuego.plataforma_id) {
-    toast.error('Selecciona plataforma')
+  const platPayload = buildPlataformasPayload(editJuego.plataformas)
+  if (platPayload.error) {
+    toast.error(platPayload.error)
     return
   }
   savingEdit.value = true
@@ -869,8 +981,7 @@ async function guardarEdicionJuego() {
       imagen_url: editJuego.imagen_url || null,
       genero: editJuego.genero.trim(),
       edad_minima: editJuego.edad_minima,
-      plataforma_id: editJuego.plataforma_id,
-      control_stock: editJuego.control_stock,
+      plataformas: platPayload.plataformas,
     })
     toast.success('Videojuego actualizado')
     editJuegoOpen.value = false
@@ -1026,8 +1137,9 @@ async function submitJuego() {
     toast.error('El género es obligatorio')
     return
   }
-  if (!formJuego.plataforma_id) {
-    toast.error('Selecciona una plataforma')
+  const platPayload = buildPlataformasPayload(formJuego.plataformas)
+  if (platPayload.error) {
+    toast.error(platPayload.error)
     return
   }
   saving.value = true
@@ -1039,8 +1151,7 @@ async function submitJuego() {
       imagen_url: formJuego.imagen_url || null,
       genero: formJuego.genero.trim(),
       edad_minima: formJuego.edad_minima,
-      plataforma_id: formJuego.plataforma_id,
-      control_stock: formJuego.control_stock,
+      plataformas: platPayload.plataformas,
     })
     toast.success('Videojuego creado')
     formJuego.nombre = ''
@@ -1049,8 +1160,7 @@ async function submitJuego() {
     formJuego.imagen_url = ''
     formJuego.genero = ''
     formJuego.edad_minima = 0
-    formJuego.plataforma_id = 0
-    formJuego.control_stock = 0
+    formJuego.plataformas = [{ plataforma_id: 0, control_stock: 0 }]
     await cargarJuegos()
     showFormJuego.value = false
   } catch (e) {
@@ -1308,6 +1418,48 @@ async function eliminar(id) {
 
 .admin-field-full {
   grid-column: 1 / -1;
+}
+
+.admin-label-block {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(236, 240, 241, 0.85);
+  margin-bottom: 6px;
+}
+
+.admin-plat-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-plat-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-plat-row select,
+.admin-plat-row input[type='number'] {
+  flex: 1;
+  min-width: 140px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(26, 21, 40, 0.85);
+  color: #ecf0f1;
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.admin-plat-remove {
+  flex-shrink: 0;
+}
+
+.admin-plat-summary {
+  font-size: 0.8rem;
+  color: rgba(236, 240, 241, 0.55);
 }
 
 .admin-btn-primary {
