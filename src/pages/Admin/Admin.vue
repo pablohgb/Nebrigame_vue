@@ -210,6 +210,9 @@
               <span v-if="resumenPlataformasJuego(item)" class="admin-plat-summary">{{
                 resumenPlataformasJuego(item)
               }}</span>
+              <span v-if="resumenStockJuego(item)" class="admin-stock-summary"
+                >Stock: {{ resumenStockJuego(item) }}</span
+              >
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarJuego(item)">
@@ -285,7 +288,7 @@
                 <span class="admin-id-badge">ID {{ item.id }}</span>
                 {{ item.nombre }}
               </strong>
-              <span>{{ item.precio }} € · {{ item.consola?.fabricante || '—' }}</span>
+              <span>{{ item.precio }} € · Stock: {{ item.consola?.control_stock ?? 0 }} · {{ item.consola?.fabricante || '—' }}</span>
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarConsola(item)">
@@ -346,7 +349,7 @@
                 <span class="admin-id-badge">ID {{ item.id }}</span>
                 {{ item.nombre }}
               </strong>
-              <span>{{ item.precio }} € · {{ item.merchandising?.categoria || '—' }}</span>
+              <span>{{ item.precio }} € · Stock: {{ item.merchandising?.control_stock ?? 0 }} · {{ item.merchandising?.categoria || '—' }}</span>
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarMerch(item)">
@@ -788,6 +791,13 @@ function resumenPlataformasJuego(item) {
   const plats = item.juego?.plataformas || []
   if (!plats.length) return ''
   return plats.map((p) => p.nombre).join(' · ')
+}
+
+/** Stock por plataforma para listado admin (juegos). */
+function resumenStockJuego(item) {
+  const plats = item.juego?.plataformas || []
+  if (!plats.length) return ''
+  return plats.map((p) => `${p.nombre}: ${pivotJuegoStock(p)}`).join(' · ')
 }
 
 function addFormJuegoPlat() {
@@ -1460,6 +1470,11 @@ async function eliminar(id) {
 .admin-plat-summary {
   font-size: 0.8rem;
   color: rgba(236, 240, 241, 0.55);
+}
+
+.admin-stock-summary {
+  font-size: 0.8rem;
+  color: rgba(180, 255, 210, 0.85);
 }
 
 .admin-btn-primary {
