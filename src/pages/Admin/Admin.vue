@@ -1,5 +1,6 @@
 <template>
-  <div class="page-wrapper admin-page">
+  <NotFound v-if="adminAccessDenied" />
+  <div v-else-if="adminGateReady" class="page-wrapper admin-page">
     <Header />
     <main class="admin-main">
       <h1>Administración</h1>
@@ -634,6 +635,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 import Header from '../../components/Header/Header.vue'
 import Footer from '../../components/Footer/Footer.vue'
+import NotFound from '../NotFound/NotFound.vue'
 import { toast } from '../../stores/toastStore'
 import {
   createAdminConsola,
@@ -643,12 +645,16 @@ import {
   fetchAdminPedido,
   fetchAdminPedidos,
   patchAdminPedido,
+  fetchIsAdmin,
   updateAdminConsola,
   updateAdminJuego,
   updateAdminMerchandising,
 } from '../../api/useAdmin'
 
 const apiUrl = import.meta.env.VITE_BACK_CONNECTION
+
+const adminAccessDenied = ref(false)
+const adminGateReady = ref(false)
 
 const ESTADOS_PEDIDO = ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado']
 
@@ -937,9 +943,28 @@ function limpiarPedidos() {
   cargarPedidos()
 }
 
+async function verifyAdminAccess() {
+  try {
+    const { isAdmin } = await fetchIsAdmin()
+    if (!isAdmin) {
+      adminAccessDenied.value = true
+      return false
+    }
+    return true
+  } catch {
+    adminAccessDenied.value = true
+    return false
+  }
+}
+
 watch(
   tab,
-  (t) => {
+  async (t) => {
+    if (adminAccessDenied.value) return
+    const ok = await verifyAdminAccess()
+    if (!ok) return
+    adminGateReady.value = true
+
     showFormJuego.value = false
     showFormConsola.value = false
     showFormMerch.value = false

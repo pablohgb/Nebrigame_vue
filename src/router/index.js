@@ -15,8 +15,6 @@ import Shipping from '../pages/Shipping/Shipping.vue'
 import Payment from '../pages/Payment/Payment.vue'
 import Admin from '../pages/Admin/Admin.vue'
 import { useUserStore } from '../stores/userStore'
-import { toast } from '../stores/toastStore'
-import { fetchIsAdmin } from '../api/useAdmin'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,12 +53,6 @@ router.beforeEach(async (to) => {
   const userStore = useUserStore()
   if (!userStore.accessToken) {
     return { path: '/login', query: { redirect: '/admin' }, replace: true }
-  }
-
-  const { isAdmin } = await fetchIsAdmin()
-  if (!isAdmin) {
-    toast.error('No tienes permisos de administración')
-    return { path: '/', replace: true }
   }
 
   return true
