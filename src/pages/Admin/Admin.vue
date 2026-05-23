@@ -289,7 +289,7 @@
                 <span class="admin-id-badge">ID {{ item.id }}</span>
                 {{ item.nombre }}
               </strong>
-              <span>{{ item.precio }} € - Stock ⇾ {{ item.consola?.control_stock ?? 0 }} | {{ item.consola?.fabricante || '—' }}</span>
+              <span>{{ item.precio }} € - Stock: {{ item.consola?.control_stock ?? 0 }} | {{ item.consola?.fabricante || '—' }}</span>
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarConsola(item)">
@@ -350,7 +350,7 @@
                 <span class="admin-id-badge">ID {{ item.id }}</span>
                 {{ item.nombre }}
               </strong>
-              <span>{{ item.precio }} € - Stock ⇾ {{ item.merchandising?.control_stock ?? 0 }} | {{ item.merchandising?.categoria || '—' }}</span>
+              <span>{{ item.precio }} € - Stock: {{ item.merchandising?.control_stock ?? 0 }} | {{ item.merchandising?.categoria || '—' }}</span>
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarMerch(item)">
