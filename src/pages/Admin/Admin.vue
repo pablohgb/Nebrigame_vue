@@ -69,7 +69,7 @@
         </div>
 
         <p v-if="loading.pedidos" class="admin-loading">Cargando pedidos…</p>
-        <p v-else-if="!pedidosLista.length" class="admin-empty">No hay pedidos que mostrar.</p>
+        <p v-else-if="!pedidosLista.length" class="admin-empty">No hay pedidos que mostrar</p>
         <ul v-else class="admin-list">
           <li v-for="p in pedidosLista" :key="p.id" class="admin-list-item">
             <div class="admin-list-meta">
@@ -78,11 +78,11 @@
                 {{ formatEuro(p.total) }} €
               </strong>
               <span>
-                {{ formatFecha(p.fecha_pedido) }} ·
+                {{ formatFecha(p.fecha_pedido) }} |
                 <span class="admin-estado-pill">{{ p.estado }}</span>
               </span>
               <span v-if="p.usuario">
-                {{ p.usuario.nombre }} {{ p.usuario.apellido1 }} · {{ p.usuario.email }}
+                {{ p.usuario.nombre }} {{ p.usuario.apellido1 }} - {{ p.usuario.email }}
               </span>
               <span v-else>Sin usuario</span>
             </div>
@@ -207,12 +207,12 @@
                 <span class="admin-id-badge">ID {{ item.id }}</span>
                 {{ item.nombre }}
               </strong>
-              <span>{{ item.precio }} € · {{ item.juego?.genero || '—' }}</span>
+              <span>{{ item.precio }} € - {{ item.juego?.genero || '—' }}</span>
               <span v-if="resumenPlataformasJuego(item)" class="admin-plat-summary">{{
                 resumenPlataformasJuego(item)
               }}</span>
               <span v-if="resumenStockJuego(item)" class="admin-stock-summary"
-                >Stock: {{ resumenStockJuego(item) }}</span
+                >Stock {{ resumenStockJuego(item) }}</span
               >
             </div>
             <div class="admin-row-actions">
@@ -289,7 +289,7 @@
                 <span class="admin-id-badge">ID {{ item.id }}</span>
                 {{ item.nombre }}
               </strong>
-              <span>{{ item.precio }} € · Stock: {{ item.consola?.control_stock ?? 0 }} · {{ item.consola?.fabricante || '—' }}</span>
+              <span>{{ item.precio }} € - Stock ⇾ {{ item.consola?.control_stock ?? 0 }} | {{ item.consola?.fabricante || '—' }}</span>
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarConsola(item)">
@@ -350,7 +350,7 @@
                 <span class="admin-id-badge">ID {{ item.id }}</span>
                 {{ item.nombre }}
               </strong>
-              <span>{{ item.precio }} € · Stock: {{ item.merchandising?.control_stock ?? 0 }} · {{ item.merchandising?.categoria || '—' }}</span>
+              <span>{{ item.precio }} € - Stock ⇾ {{ item.merchandising?.control_stock ?? 0 }} | {{ item.merchandising?.categoria || '—' }}</span>
             </div>
             <div class="admin-row-actions">
               <button type="button" class="admin-btn-secondary" @click="abrirEditarMerch(item)">
@@ -564,7 +564,7 @@
         <p v-if="pedidoModalLoading" class="admin-loading">Cargando…</p>
         <template v-else-if="pedidoVista">
           <p class="admin-hint" style="margin-top: 0">
-            {{ formatFecha(pedidoVista.fecha_pedido) }} · Total {{ formatEuro(pedidoVista.total) }} €
+            {{ formatFecha(pedidoVista.fecha_pedido) }} - Total {{ formatEuro(pedidoVista.total) }} €
           </p>
           <div class="admin-form-grid">
             <div class="admin-field">
@@ -796,14 +796,14 @@ function pivotJuegoStock(plataforma) {
 function resumenPlataformasJuego(item) {
   const plats = item.juego?.plataformas || []
   if (!plats.length) return ''
-  return plats.map((p) => p.nombre).join(' · ')
+  return plats.map((p) => p.nombre).join(' | ')
 }
 
 /** Stock por plataforma para listado admin (juegos). */
 function resumenStockJuego(item) {
   const plats = item.juego?.plataformas || []
   if (!plats.length) return ''
-  return plats.map((p) => `${p.nombre}: ${pivotJuegoStock(p)}`).join(' · ')
+  return plats.map((p) => `${p.nombre} ⇾ ${pivotJuegoStock(p)}`).join(' | ')
 }
 
 function addFormJuegoPlat() {
