@@ -128,10 +128,6 @@
           </button>
         </div>
         <div v-show="showFormJuego">
-          <p class="admin-hint">
-            Al editar un juego con varias plataformas, guardar unifica stock/plataforma en una sola fila (la del
-            formulario).
-          </p>
           <div class="admin-form-grid">
           <div class="admin-field">
             <label for="aj-nombre">Nombre</label>
