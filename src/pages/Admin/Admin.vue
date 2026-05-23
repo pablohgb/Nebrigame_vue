@@ -211,7 +211,7 @@
                 resumenPlataformasJuego(item)
               }}</span>
               <span v-if="resumenStockJuego(item)" class="admin-stock-summary"
-                >Stock {{ resumenStockJuego(item) }}</span
+                >Stock ⇾ {{ resumenStockJuego(item) }}</span
               >
             </div>
             <div class="admin-row-actions">
@@ -797,7 +797,7 @@ function resumenPlataformasJuego(item) {
 function resumenStockJuego(item) {
   const plats = item.juego?.plataformas || []
   if (!plats.length) return ''
-  return plats.map((p) => `${p.nombre} ⇾ ${pivotJuegoStock(p)}`).join(' | ')
+  return plats.map((p) => `${p.nombre}: ${pivotJuegoStock(p)}`).join(' | ')
 }
 
 function addFormJuegoPlat() {
