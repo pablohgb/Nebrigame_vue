@@ -300,8 +300,8 @@
   }
 
   .no-encontrado-imagen {
-    width: 300px;
-    height: 300px;
+    width: 50%;
+    height: 50%;
     object-fit: cover;
     border-radius: 20px;
   }
