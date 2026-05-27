@@ -117,7 +117,10 @@
 <style scoped>
 
   .sidebar-wrapper {
-    position: relative;
+    position: sticky;
+    top: 24px;
+    /* En grid, sin esto la celda se estira a toda la fila y sticky suele comportarse mal */
+    align-self: start;
   }
 
   .btn-toggle-filtros {
@@ -134,9 +137,6 @@
     margin: 0;
     border: 2px solid rgba(116, 57, 179, 0.449);
     border-radius: 12px;
-    align-self: flex-start;
-    position: sticky;
-    top: 24px;
     background-color: rgba(141, 124, 173, 0.966);
   }
 
@@ -221,6 +221,11 @@
       cursor: pointer;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 16px 0 0 0;
+    }
+
+    .sidebar-wrapper {
+      position: static;
+      align-self: stretch;
     }
 
     .sidebar {

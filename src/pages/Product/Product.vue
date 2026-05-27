@@ -315,7 +315,7 @@
     background-repeat: repeat-x round;
     background-size: 400px 400px;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .page-wrapper section {
