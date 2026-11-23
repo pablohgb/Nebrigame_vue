@@ -35,6 +35,11 @@
             <Percent :size="18" /> Ofertas
           </RouterLink>
         </li>
+        <li>
+          <RouterLink to="/sobre-nosotros" :class="route.path === '/sobre-nosotros' ? 'active' : ''" @click="toggleMenu">
+            <Users :size="18" /> Sobre Nosotros
+          </RouterLink>
+        </li>
 
         <li class="search-item">
           <form ref="searchFormRef" @submit.prevent="handleSearch" :class="`header-search ${isSearchExpanded ? 'expanded' : ''}`">
@@ -79,7 +84,7 @@
 
   import { ref, watch, onMounted, onUnmounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
-  import { Gamepad2, Tv, Gift, Percent, Heart, ShoppingCart, Menu, X, Search as SearchIcon } from 'lucide-vue-next'
+  import { Gamepad2, Tv, Gift, Percent, Users, Heart, ShoppingCart, Menu, X, Search as SearchIcon } from 'lucide-vue-next'
   import UsuarioDropdown from '../UsuarioDropdown/UsuarioDropdown.vue'
 
   const props = defineProps({

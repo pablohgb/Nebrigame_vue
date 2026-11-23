@@ -10,6 +10,9 @@
             Encuentra todo lo que necesitas con un sólo click.
             Compra ahora o reserva los últimos lanzamientos.
           </p>
+          <p class="disclaimer">
+            Proyecto educativo. No se realizan transacciones ni se generan pedidos reales.
+          </p>
         </section>
       </div>
     </div>
@@ -82,6 +85,13 @@
     padding: 4rem 2rem;
     margin-bottom: 3rem;
     text-align: left;
+  }
+
+  .disclaimer {
+    margin-top: 1.25rem;
+    font-size: 2rem;
+    opacity: 0.85;
+    font-style: italic;
   }
 
   .home-container {

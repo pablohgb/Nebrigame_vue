@@ -14,6 +14,7 @@ import Cart from '../pages/Cart/Cart.vue'
 import Shipping from '../pages/Shipping/Shipping.vue'
 import Payment from '../pages/Payment/Payment.vue'
 import Admin from '../pages/Admin/Admin.vue'
+import About from '../pages/About/About.vue'
 import { useUserStore } from '../stores/userStore'
 
 const router = createRouter({
@@ -43,6 +44,7 @@ const router = createRouter({
     { path: '/envio', component: Shipping },
     { path: '/pago', component: Payment },
     { path: '/admin', component: Admin },
+    { path: '/sobre-nosotros', component: About },
     { path: '/:pathMatch(.*)*', component: NotFound }
   ]
 })
